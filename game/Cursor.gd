@@ -28,7 +28,7 @@ func move_cursor(mdel:Vector2):
 	transform.origin.y = -cy
 	
 	if SSP.enable_drift_cursor:
-		if cx != rx or cy != ry:
+		if !SSP.blind and (cx != rx or cy != ry):
 			$Mesh2.visible = true
 			$Mesh2.transform.origin.x = rx - cx
 			$Mesh2.transform.origin.y = -(ry - cy)
@@ -90,7 +90,7 @@ func _process(delta):
 		transform.origin.x = p.x
 		transform.origin.y = p.y
 	
-	if SSP.show_cursor and SSP.cursor_trail and SSP.smart_trail and trail_started:
+	if !SSP.blind and SSP.cursor_trail and SSP.smart_trail and trail_started:
 		var start_p = global_transform.origin
 		var end_p = prev_end
 		var amt = min(ceil(SSP.trail_detail*(start_p-end_p).length()),120)
@@ -123,7 +123,6 @@ func _process(delta):
 		prev_end = global_transform.origin
 
 func _ready():
-	if !SSP.show_cursor: visible = false
 	
 	if !SSP.replaying:
 		if SSP.lock_mouse:
@@ -177,7 +176,11 @@ func _ready():
 					get_node("../..").call_deferred("add_child",trail)
 				trail.offset = (i) / float(SSP.trail_detail-1)
 				trail.start()
-	trail_started = true
+	if SSP.blind:
+		visible = false
+		$Mesh.visible = false
+	else:
+		trail_started = true
 func _exit_tree():
 	for n in trail_cache:
 		n.queue_free()

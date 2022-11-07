@@ -462,7 +462,7 @@ var custom_speed:float = 1 setget _set_custom_speed
 var health_model:int = Globals.HP_SOUNDSPACE setget _set_health_model
 var grade_system:int = Globals.GRADE_SSP setget _set_grade_system
 var visual_mode:bool = false setget set_visual_mode
-
+var blind: bool = false setget set_blind
 # Mod setters - Normal
 func set_mod_extra_energy(v:bool):
 	if v:
@@ -518,6 +518,8 @@ func set_visual_mode(v:bool):
 	if v:
 		set_mod_nofail(true)
 	visual_mode = v; emit_signal("mods_changed")
+func set_blind(v:bool):
+	blind = v; emit_signal("mods_changed")
 func _set_health_model(v:int):
 	health_model = v; emit_signal("mods_changed")
 func _set_grade_system(v:int):
@@ -579,7 +581,6 @@ var show_hp_bar:bool = true
 var show_timer:bool = true
 var show_left_panel:bool = true
 var show_right_panel:bool = true
-var show_cursor:bool = true
 var show_accuracy_bar:bool = true
 var show_letter_grade:bool = true
 var attach_hp_to_grid:bool = false

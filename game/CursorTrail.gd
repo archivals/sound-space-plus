@@ -50,7 +50,7 @@ func update(delta):
 		emit_signal("cache_me")
 
 func _process(delta):
-	if started:
+	if started and not SSP.blind:
 		if SSP.smart_trail: update(delta)
 		else: upd_dumb(delta)
 
