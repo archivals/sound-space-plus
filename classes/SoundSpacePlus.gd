@@ -26,6 +26,7 @@ var user_map_dir:String = Globals.p("user://maps")
 var user_best_dir:String = Globals.p("user://bests")
 var user_colorset_dir:String = Globals.p("user://colorsets")
 var user_friend_dir:String = Globals.p("user://friend")
+var user_mesh_dir:String = Globals.p("user://meshes")
 
 # Installed content info
 var installed_dlc:Array = ["ssp_basegame"]
@@ -530,6 +531,7 @@ func _set_grade_system(v:int):
 var approach_rate:float = 40
 var spawn_distance:float = 40
 var note_spawn_effect:bool = false
+var note_size:float = 1
 var fade_length:float = 0.5
 
 var show_hit_effect:bool = true
@@ -876,7 +878,7 @@ func load_saved_settings():
 		file.close()
 		
 		if decode.error:
-			print(decode.error_string)
+			print("!!! Error on line " + str(decode.error_line) + ": " + decode.error_string)
 			return ((-100) - decode.error)
 		
 		var data:Dictionary = decode.result
@@ -910,11 +912,10 @@ func load_saved_settings():
 			enable_grid = data.enable_grid
 		if data.has("cursor_scale"): 
 			cursor_scale = data.cursor_scale
+		if data.has("note_size"): 
+			note_size = data.note_size
 		if data.has("edge_drift"): 
-			if typeof(data.edge_drift) == TYPE_STRING:
-				edge_drift = NAN
-			else:
-				edge_drift = data.edge_drift
+			edge_drift = dser_float(data.edge_drift)
 		if data.has("enable_drift_cursor"): 
 			enable_drift_cursor = data.enable_drift_cursor
 		if data.has("hitwindow_ms"): 
@@ -1058,17 +1059,17 @@ func load_saved_settings():
 		
 		
 		if data.has("master_volume"):
-			AudioServer.set_bus_volume_db(AudioServer.get_bus_index("Master"), data.master_volume)
+			AudioServer.set_bus_volume_db(AudioServer.get_bus_index("Master"), dser_float(data.master_volume))
 		if data.has("music_volume"):
-			AudioServer.set_bus_volume_db(AudioServer.get_bus_index("Music"), data.music_volume)
+			AudioServer.set_bus_volume_db(AudioServer.get_bus_index("Music"), dser_float(data.music_volume))
 		if data.has("hit_volume"):
-			AudioServer.set_bus_volume_db(AudioServer.get_bus_index("HitSound"), data.hit_volume)
+			AudioServer.set_bus_volume_db(AudioServer.get_bus_index("HitSound"), dser_float(data.hit_volume))
 		if data.has("miss_volume"):
-			AudioServer.set_bus_volume_db(AudioServer.get_bus_index("MissSound"), data.miss_volume)
+			AudioServer.set_bus_volume_db(AudioServer.get_bus_index("MissSound"), dser_float(data.miss_volume))
 		if data.has("fail_volume"):
-			AudioServer.set_bus_volume_db(AudioServer.get_bus_index("FailSound"), data.fail_volume)
+			AudioServer.set_bus_volume_db(AudioServer.get_bus_index("FailSound"), dser_float(data.fail_volume))
 		if data.has("pb_volume"):
-			AudioServer.set_bus_volume_db(AudioServer.get_bus_index("PBSound"), data.pb_volume)
+			AudioServer.set_bus_volume_db(AudioServer.get_bus_index("PBSound"), dser_float(data.pb_volume))
 		
 		lcol(data,"grade_s_color")
 		lcol(data,"panel_bg")
@@ -1294,6 +1295,24 @@ func load_saved_settings():
 		file.close()
 		save_settings()
 	return 0
+	
+func ser_float(n: float):
+	if is_nan(n):
+		return "nan"
+	elif is_inf(n):
+		return "+inf" if sign(n) > 0 else "-inf"
+	else:
+		return n
+
+func dser_float(s):
+	if typeof(s) == TYPE_STRING:
+		if "inf" in s:
+			return INF * (1 if s[0] == "+" else -1)
+		else:
+			return NAN
+	else:
+		return s
+
 func save_settings():
 	var file:File = File.new()
 	var err:int = file.open(Globals.p("user://settings.json"),File.WRITE)
@@ -1369,12 +1388,12 @@ func save_settings():
 			cursor_color_type = cursor_color_type,
 			target_fps = Engine.target_fps,
 			
-			master_volume = AudioServer.get_bus_volume_db(AudioServer.get_bus_index("Master")),
-			music_volume = AudioServer.get_bus_volume_db(AudioServer.get_bus_index("Music")),
-			hit_volume = AudioServer.get_bus_volume_db(AudioServer.get_bus_index("HitSound")),
-			miss_volume = AudioServer.get_bus_volume_db(AudioServer.get_bus_index("MissSound")),
-			fail_volume = AudioServer.get_bus_volume_db(AudioServer.get_bus_index("FailSound")),
-			pb_volume = AudioServer.get_bus_volume_db(AudioServer.get_bus_index("PBSound")),
+			master_volume = ser_float(AudioServer.get_bus_volume_db(AudioServer.get_bus_index("Master"))),
+			music_volume = ser_float(AudioServer.get_bus_volume_db(AudioServer.get_bus_index("Music"))),
+			hit_volume = ser_float(AudioServer.get_bus_volume_db(AudioServer.get_bus_index("HitSound"))),
+			miss_volume = ser_float(AudioServer.get_bus_volume_db(AudioServer.get_bus_index("MissSound"))),
+			fail_volume = ser_float(AudioServer.get_bus_volume_db(AudioServer.get_bus_index("FailSound"))),
+			pb_volume = ser_float(AudioServer.get_bus_volume_db(AudioServer.get_bus_index("PBSound"))),
 			
 			cursor_color = scol(cursor_color),
 			panel_bg = scol(panel_bg),
@@ -1414,14 +1433,10 @@ func save_settings():
 			grade_c_color = scol(grade_c_color),
 			grade_d_color = scol(grade_d_color),
 			grade_f_color = scol(grade_f_color),
+			edge_drift = ser_float(edge_drift)
 		}
 		
-		if is_nan(edge_drift):
-			data.edge_drift = "nan"
-		else:
-			data.edge_drift = edge_drift
-		
-		file.store_string(to_json(data))
+		file.store_string(JSON.print(data, "\t"))
 		
 		file.close()
 		return "OK"
@@ -1573,13 +1588,6 @@ func register_worlds():
 		"res://content/worlds/vaporwave.tscn", "balt",
 		"res://content/worlds/covers/vaporwave.png"
 	))
-	# doesn't work :(
-	# registry_world.add_item(BackgroundWorld.new(
-	# 	"ssp_security_room", "Security Room",
-	# 	"res://content/worlds/security_room.tscn", "balt",
-	# 	"res://content/worlds/covers/vaporwave.png"
-	# ))
-	# ----------------------------------------------------
 	# Custom content
 	registry_world.add_item(BackgroundWorld.new(
 		"ssp_custombg", "Custom Background",
@@ -1613,6 +1621,18 @@ func register_meshes():
 		"ssp_plane", "Front of Block",
 		"res://content/blocks/plane.obj", "Chedski"
 	))
+	var dir = Directory.new()
+	if dir.open(user_mesh_dir) == OK:
+		dir.list_dir_begin(true, false)
+		var mesh_name: String = dir.get_next()
+		while mesh_name != "":
+			if not dir.current_is_dir() and mesh_name.get_extension() == "obj":
+				registry_mesh.add_item(NoteMesh.new(
+					"ugc_" + mesh_name.get_file().to_lower().replace(" ","_"), 
+					mesh_name.get_basename() + " (custom)",
+					user_mesh_dir + "/" + mesh_name, "???"
+				))
+			mesh_name = dir.get_next()
 func register_effects():
 	registry_effect.add_item(NoteEffect.new(
 		"ssp_ripple", "Ripple* (no color)", "res://content/notefx/ripple.tscn", "Chedski"
@@ -1731,8 +1751,8 @@ func do_init(_ud=null):
 		yield(get_tree().create_timer(7),"timeout")
 		user_dir = Globals.p("user://")
 	var err:int = dir.open(user_dir)
-	if OS.has_feature("editor"):
-		yield(get_tree().create_timer(0.35),"timeout")
+	#if OS.has_feature("editor"):
+	#	yield(get_tree().create_timer(0.35),"timeout")
 	if Input.is_key_pressed(KEY_CONTROL) and Input.is_key_pressed(KEY_U):
 		err = -1
 	
@@ -1743,7 +1763,6 @@ func do_init(_ud=null):
 	
 	# Setup directories if they don't already exist
 	var convert_pb_format:bool = false
-	
 	if !first_init_done:
 		if !dir.dir_exists(user_mod_dir): dir.make_dir(user_mod_dir)
 		if !dir.dir_exists(user_pack_dir): dir.make_dir(user_pack_dir)
@@ -1751,6 +1770,13 @@ func do_init(_ud=null):
 		if !dir.dir_exists(user_map_dir): dir.make_dir(user_map_dir)
 		if !dir.dir_exists(user_colorset_dir): dir.make_dir(user_colorset_dir)
 		if !dir.dir_exists(user_friend_dir): dir.make_dir(user_friend_dir)
+		if !dir.dir_exists(user_mesh_dir): 
+			dir.make_dir(user_mesh_dir)
+			file.open(user_mesh_dir + "/" + "readme.txt", File.WRITE)
+			file.store_line("The second material is transparent, everything else is opaque.")
+			file.store_line("The default blender cube is about the right size for a mesh.")
+			file.store_line("In blender, the mesh should face towards the positive Y direction.")
+			file.close()
 		if !dir.dir_exists(Globals.p("user://replays")): dir.make_dir(Globals.p("user://replays"))
 		if !dir.dir_exists(user_best_dir):
 			convert_pb_format = true
