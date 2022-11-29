@@ -1440,7 +1440,7 @@ func save_settings():
 			grade_c_color = scol(grade_c_color),
 			grade_d_color = scol(grade_d_color),
 			grade_f_color = scol(grade_f_color),
-      
+	  
 			edge_drift = ser_float(edge_drift),
 			ensure_hitsync = ensure_hitsync
 		}
@@ -1656,7 +1656,7 @@ func register_meshes():
 				registry_mesh.add_item(NoteMesh.new(
 					"ugc_" + mesh_name.get_file().to_lower().replace(" ","_"), 
 					mesh_name.get_basename() + " (custom)",
-					user_mesh_dir + "/" + mesh_name, "???"
+					user_mesh_dir.plus_file(mesh_name), "???"
 				))
 			mesh_name = dir.get_next()
 func register_effects():
@@ -1796,9 +1796,9 @@ func do_init(_ud=null):
 		if !dir.dir_exists(user_map_dir): dir.make_dir(user_map_dir)
 		if !dir.dir_exists(user_colorset_dir): dir.make_dir(user_colorset_dir)
 		if !dir.dir_exists(user_friend_dir): dir.make_dir(user_friend_dir)
-		if !dir.dir_exists(user_mesh_dir): 
-			dir.make_dir(user_mesh_dir)
-			file.open(user_mesh_dir + "/" + "readme.txt", File.WRITE)
+		if !dir.dir_exists(user_mesh_dir): dir.make_dir(user_mesh_dir)
+		if !dir.file_exists(user_mesh_dir.plus_file("readme.txt")):
+			file.open(user_mesh_dir.plus_file("readme.txt"), File.WRITE)
 			file.store_line("The second material is transparent, everything else is opaque.")
 			file.store_line("The default blender cube is about the right size for a mesh.")
 			file.store_line("In blender, the mesh should face towards the positive Y direction.")
