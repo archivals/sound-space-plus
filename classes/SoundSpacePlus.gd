@@ -665,6 +665,8 @@ var show_warnings:bool = true
 var auto_maximize:bool = false
 
 # Settings - Experimental
+var ensure_hitsync:bool = false
+var hitsync_offset:float = 0 # don't save this yet; probably not even a necessary setting
 
 
 
@@ -863,7 +865,7 @@ func lcol(data:Dictionary,target:String) -> void:
 		set(target, Color(data[target]))
 
 # Settings file
-const current_sf_version = 45 # SV
+const current_sf_version = 46 # SV
 func load_saved_settings():
 	if Input.is_key_pressed(KEY_CONTROL) and Input.is_key_pressed(KEY_L): 
 		print("force settings read error")
@@ -1070,6 +1072,9 @@ func load_saved_settings():
 			AudioServer.set_bus_volume_db(AudioServer.get_bus_index("FailSound"), dser_float(data.fail_volume))
 		if data.has("pb_volume"):
 			AudioServer.set_bus_volume_db(AudioServer.get_bus_index("PBSound"), dser_float(data.pb_volume))
+		
+		if data.has("ensure_hitsync"):
+			ensure_hitsync = data.ensure_hitsync
 		
 		lcol(data,"grade_s_color")
 		lcol(data,"panel_bg")
@@ -1292,6 +1297,8 @@ func load_saved_settings():
 			hit_fov_decay = float(file.get_32())
 		if sv >= 45:
 			hit_fov_exponential = bool(file.get_8())
+		if sv >= 46:
+			ensure_hitsync = bool(file.get_8())
 		file.close()
 		save_settings()
 	return 0
@@ -1388,12 +1395,12 @@ func save_settings():
 			cursor_color_type = cursor_color_type,
 			target_fps = Engine.target_fps,
 			
-			master_volume = ser_float(AudioServer.get_bus_volume_db(AudioServer.get_bus_index("Master"))),
-			music_volume = ser_float(AudioServer.get_bus_volume_db(AudioServer.get_bus_index("Music"))),
-			hit_volume = ser_float(AudioServer.get_bus_volume_db(AudioServer.get_bus_index("HitSound"))),
-			miss_volume = ser_float(AudioServer.get_bus_volume_db(AudioServer.get_bus_index("MissSound"))),
-			fail_volume = ser_float(AudioServer.get_bus_volume_db(AudioServer.get_bus_index("FailSound"))),
-			pb_volume = ser_float(AudioServer.get_bus_volume_db(AudioServer.get_bus_index("PBSound"))),
+			master_volume = ser_float(clamp(AudioServer.get_bus_volume_db(AudioServer.get_bus_index("Master")),-80,1000000)),
+			music_volume = ser_float(clamp(AudioServer.get_bus_volume_db(AudioServer.get_bus_index("Music")),-80,1000000)),
+			hit_volume = ser_float(clamp(AudioServer.get_bus_volume_db(AudioServer.get_bus_index("HitSound")),-80,1000000)),
+			miss_volume = ser_float(clamp(AudioServer.get_bus_volume_db(AudioServer.get_bus_index("MissSound")),-80,1000000)),
+			fail_volume = ser_float(clamp(AudioServer.get_bus_volume_db(AudioServer.get_bus_index("FailSound")),-80,1000000)),
+			pb_volume = ser_float(clamp(AudioServer.get_bus_volume_db(AudioServer.get_bus_index("PBSound")),-80,1000000)),
 			
 			cursor_color = scol(cursor_color),
 			panel_bg = scol(panel_bg),
@@ -1433,7 +1440,9 @@ func save_settings():
 			grade_c_color = scol(grade_c_color),
 			grade_d_color = scol(grade_d_color),
 			grade_f_color = scol(grade_f_color),
-			edge_drift = ser_float(edge_drift)
+      
+			edge_drift = ser_float(edge_drift),
+			ensure_hitsync = ensure_hitsync
 		}
 		
 		file.store_string(JSON.print(data, "\t"))
@@ -1588,6 +1597,23 @@ func register_worlds():
 		"res://content/worlds/vaporwave.tscn", "balt",
 		"res://content/worlds/covers/vaporwave.png"
 	))
+	registry_world.add_item(BackgroundWorld.new(
+		"ssp_seifuku", "Seifuku (TW: Gore)",
+		"res://content/worlds/seifuku.tscn", "pyrule",
+		"res://content/worlds/seifuku/scum.png"
+	))
+	registry_world.add_item(BackgroundWorld.new(
+		"ssp_seifuku_blurred", "Seifuku Blurred",
+		"res://content/worlds/seifukub.tscn", "pyrule",
+		"res://content/worlds/seifuku/scumb.png"
+	))
+	# doesn't work :(
+	# registry_world.add_item(BackgroundWorld.new(
+	# 	"ssp_security_room", "Security Room",
+	# 	"res://content/worlds/security_room.tscn", "balt",
+	# 	"res://content/worlds/covers/vaporwave.png"
+	# ))
+	# ----------------------------------------------------
 	# Custom content
 	registry_world.add_item(BackgroundWorld.new(
 		"ssp_custombg", "Custom Background",
