@@ -227,6 +227,8 @@ onready var Grid = get_node("../HUD")
 
 func do_half_lock():
 	var cursorpos = $Cursor.transform.origin
+	if SSP.follow_drift_cursor:
+		cursorpos += $Cursor/Mesh2.transform.origin
 	var centeroff = cursorpos - cursor_offset
 	var hlm = 0.35
 	var uim = SSP.ui_parallax * 0.1

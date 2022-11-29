@@ -567,6 +567,7 @@ var trail_detail:int = 10
 var trail_time:float = 0.15
 var cursor_scale:float = 1
 var enable_drift_cursor:bool = true
+var follow_drift_cursor:bool = false
 var cursor_spin:float = 0
 var cursor_face_velocity:bool = false # Disabled
 
@@ -919,6 +920,8 @@ func load_saved_settings():
 				edge_drift = data.edge_drift
 		if data.has("enable_drift_cursor"): 
 			enable_drift_cursor = data.enable_drift_cursor
+		if data.has("follow_drift_cursor"): 
+			follow_drift_cursor = data.follow_drift_cursor
 		if data.has("hitwindow_ms"): 
 			hitwindow_ms = data.hitwindow_ms
 		if data.has("cursor_spin"): 
@@ -1330,6 +1333,7 @@ func save_settings():
 			enable_grid = enable_grid,
 			cursor_scale = cursor_scale,
 			enable_drift_cursor = enable_drift_cursor,
+			follow_drift_cursor = follow_drift_cursor,
 			hitwindow_ms = hitwindow_ms,
 			cursor_spin = cursor_spin,
 			enable_border = enable_border,
