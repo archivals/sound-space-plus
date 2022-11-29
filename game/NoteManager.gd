@@ -46,6 +46,12 @@ func reposition_notes(force:bool=false):
 			next_ms = note.notems
 		elif ms >= note.notems and note.state == Globals.NSTATE_ACTIVE:
 			var result = SSP.visual_mode or note.check($Cursor.transform.origin,last_cursor_position)
+			if SSP.play_hit_snd and SSP.ensure_hitsync: 
+				if SSP.sfx_2d:
+					$Hit2D.play()
+				else:
+					$Hit.transform = note.transform
+					$Hit.play()
 			if !result and (ms > note.notems + SSP.hitwindow_ms or pause_state == -1):
 #				note_passed = true
 				# notes should not be in the hitwindow if the game is paused
@@ -73,7 +79,7 @@ func reposition_notes(force:bool=false):
 				if !SSP.replaying and SSP.record_replays:
 					SSP.replay.note_hit(note.id)
 				note.state = Globals.NSTATE_HIT
-				if SSP.play_hit_snd: 
+				if SSP.play_hit_snd and !SSP.ensure_hitsync: 
 					if SSP.sfx_2d:
 						$Hit2D.play()
 					else:
@@ -175,8 +181,8 @@ func _ready():
 	
 	var img = Globals.imageLoader.load_if_exists("user://note")
 	if img:
-		m.albedo_texture = img
-		mt.albedo_texture = img
+		m.set_shader_param("image",img)
+		mt.set_shader_param("image",img)
 	
 	if !SSP.replaying and SSP.record_replays:
 		SSP.replay = Replay.new()

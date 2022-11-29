@@ -1,4 +1,4 @@
-[gd_scene load_steps=83 format=2]
+[gd_scene load_steps=84 format=2]
 
 [ext_resource path="res://uitheme.tres" type="Theme" id=1]
 [ext_resource path="res://font/Lato/Lato-Regular.ttf" type="DynamicFontData" id=2]
@@ -43,6 +43,7 @@
 [ext_resource path="res://content/ui/arrow_up_white.png" type="Texture" id=41]
 [ext_resource path="res://content/ui/arrow_down_white.png" type="Texture" id=42]
 [ext_resource path="res://menu2/SettingsGroup.gd" type="Script" id=43]
+[ext_resource path="res://HitsyncOffset.gd" type="Script" id=44]
 [ext_resource path="res://menu2/ReplaceCustomFile.gd" type="Script" id=45]
 [ext_resource path="res://addons/native_dialogs/bin/native_dialog_open_file.gdns" type="Script" id=46]
 [ext_resource path="res://HitFOVAmplifier.gd" type="Script" id=47]
@@ -213,6 +214,7 @@ rect_min_size = Vector2( 0, 33 )
 custom_constants/separation = 10
 
 [node name="Save" type="Button" parent="TopButtons/HBoxContainer"]
+modulate = Color( 1, 0.984314, 0, 1 )
 margin_right = 100.0
 margin_bottom = 33.0
 rect_min_size = Vector2( 100, 0 )
@@ -259,7 +261,7 @@ script = ExtResource( 59 )
 [node name="M" type="VBoxContainer" parent="."]
 margin_top = 59.0
 margin_right = 1280.0
-margin_bottom = 5094.0
+margin_bottom = 5158.0
 custom_constants/separation = 0
 
 [node name="Modifiers" type="VBoxContainer" parent="M"]
@@ -1666,16 +1668,6 @@ script = ExtResource( 45 )
 target = "custombg"
 default_image = ExtResource( 48 )
 
-[node name="OpenFile" type="Node" parent="M/Customization/Group/H/CustomBg/CustomBg"]
-script = ExtResource( 46 )
-title = "Select file"
-initial_path = "~/Downloads"
-filters = PoolStringArray( "*.png, *.jpg, *.jpeg, *.webp, *.bmp ; Image files" )
-
-[node name="SaveFile" type="Node" parent="M/Customization/Group/H/CustomBg/CustomBg"]
-script = ExtResource( 7 )
-title = "Save file..."
-
 [node name="Label" type="Label" parent="M/Customization/Group/H/CustomBg/CustomBg"]
 margin_left = -162.0
 margin_right = -10.0
@@ -1700,8 +1692,8 @@ expand = true
 stretch_mode = 1
 
 [node name="Desc" type="Label" parent="M/Customization/Group/H/CustomBg/CustomBg"]
-margin_left = 257.0
-margin_right = 321.0
+margin_left = 294.0
+margin_right = 657.0
 margin_bottom = 32.0
 focus_mode = 2
 theme = ExtResource( 1 )
@@ -1710,6 +1702,21 @@ custom_colors/font_color_shadow = Color( 0, 0, 0, 0 )
 custom_fonts/font = SubResource( 4 )
 text = "this is the background for the \"Custom Background\" world"
 valign = 1
+
+[node name="Clear" type="Button" parent="M/Customization/Group/H/CustomBg/CustomBg"]
+anchor_left = 1.0
+anchor_right = 1.0
+margin_left = 42.0
+margin_right = 74.0
+margin_bottom = 32.0
+theme = ExtResource( 1 )
+custom_colors/font_color_focus = Color( 0, 0, 0, 1 )
+custom_colors/font_color = Color( 0, 0, 0, 1 )
+custom_colors/font_color_hover = Color( 0, 0, 0, 1 )
+custom_colors/font_color_pressed = Color( 0, 0, 0, 1 )
+disabled = true
+icon = ExtResource( 4 )
+expand_icon = true
 
 [node name="SEPARATOR2" type="HSeparator" parent="M/Customization/Group/H"]
 margin_top = 86.0
@@ -1728,6 +1735,7 @@ rect_min_size = Vector2( 200, 32 )
 margin_right = 200.0
 margin_bottom = 32.0
 rect_min_size = Vector2( 200, 32 )
+rect_pivot_offset = Vector2( 115, 16 )
 theme = ExtResource( 1 )
 custom_colors/font_color_focus = Color( 0, 0, 0, 1 )
 custom_colors/font_color = Color( 0, 0, 0, 1 )
@@ -1737,16 +1745,6 @@ text = "Click to replace"
 script = ExtResource( 45 )
 target = "hit"
 default_image = ExtResource( 13 )
-
-[node name="OpenFile" type="Node" parent="M/Customization/Group/H/HitRipple/HitEffect"]
-script = ExtResource( 46 )
-title = "Select file"
-initial_path = "~/Downloads"
-filters = PoolStringArray( "*.png, *.jpg, *.jpeg, *.webp, *.bmp ; Image files" )
-
-[node name="SaveFile" type="Node" parent="M/Customization/Group/H/HitRipple/HitEffect"]
-script = ExtResource( 7 )
-title = "Save file..."
 
 [node name="Label" type="Label" parent="M/Customization/Group/H/HitRipple/HitEffect"]
 margin_left = -149.0
@@ -1772,8 +1770,8 @@ expand = true
 stretch_mode = 1
 
 [node name="Desc" type="Label" parent="M/Customization/Group/H/HitRipple/HitEffect"]
-margin_left = 257.0
-margin_right = 321.0
+margin_left = 294.0
+margin_right = 687.0
 margin_bottom = 32.0
 focus_mode = 2
 theme = ExtResource( 1 )
@@ -1782,6 +1780,21 @@ custom_colors/font_color_shadow = Color( 0, 0, 0, 0 )
 custom_fonts/font = SubResource( 4 )
 text = "this image is used by hit effects with an asterisk (*) in their name"
 valign = 1
+
+[node name="Clear" type="Button" parent="M/Customization/Group/H/HitRipple/HitEffect"]
+anchor_left = 1.0
+anchor_right = 1.0
+margin_left = 42.0
+margin_right = 74.0
+margin_bottom = 32.0
+theme = ExtResource( 1 )
+custom_colors/font_color_focus = Color( 0, 0, 0, 1 )
+custom_colors/font_color = Color( 0, 0, 0, 1 )
+custom_colors/font_color_hover = Color( 0, 0, 0, 1 )
+custom_colors/font_color_pressed = Color( 0, 0, 0, 1 )
+disabled = true
+icon = ExtResource( 4 )
+expand_icon = true
 
 [node name="HitEffect" type="Control" parent="M/Customization/Group/H"]
 margin_top = 136.0
@@ -1944,6 +1957,7 @@ rect_min_size = Vector2( 200, 32 )
 margin_right = 200.0
 margin_bottom = 32.0
 rect_min_size = Vector2( 200, 32 )
+rect_pivot_offset = Vector2( -432, 222 )
 theme = ExtResource( 1 )
 custom_colors/font_color_focus = Color( 0, 0, 0, 1 )
 custom_colors/font_color = Color( 0, 0, 0, 1 )
@@ -1953,16 +1967,6 @@ text = "Click to replace"
 script = ExtResource( 45 )
 target = "miss"
 default_image = ExtResource( 13 )
-
-[node name="OpenFile" type="Node" parent="M/Customization/Group/H/MissRipple/MissEffect"]
-script = ExtResource( 46 )
-title = "Select file"
-initial_path = "~/Downloads"
-filters = PoolStringArray( "*.png, *.jpg, *.jpeg, *.webp, *.bmp ; Image files" )
-
-[node name="SaveFile" type="Node" parent="M/Customization/Group/H/MissRipple/MissEffect"]
-script = ExtResource( 7 )
-title = "Save file..."
 
 [node name="Label" type="Label" parent="M/Customization/Group/H/MissRipple/MissEffect"]
 margin_left = -149.0
@@ -1988,8 +1992,8 @@ expand = true
 stretch_mode = 1
 
 [node name="Desc" type="Label" parent="M/Customization/Group/H/MissRipple/MissEffect"]
-margin_left = 257.0
-margin_right = 321.0
+margin_left = 294.0
+margin_right = 622.0
 margin_bottom = 32.0
 focus_mode = 2
 theme = ExtResource( 1 )
@@ -1998,6 +2002,21 @@ custom_colors/font_color_shadow = Color( 0, 0, 0, 0 )
 custom_fonts/font = SubResource( 4 )
 text = "same as above, but applies to your miss effect instead"
 valign = 1
+
+[node name="Clear" type="Button" parent="M/Customization/Group/H/MissRipple/MissEffect"]
+anchor_left = 1.0
+anchor_right = 1.0
+margin_left = 42.0
+margin_right = 74.0
+margin_bottom = 32.0
+theme = ExtResource( 1 )
+custom_colors/font_color_focus = Color( 0, 0, 0, 1 )
+custom_colors/font_color = Color( 0, 0, 0, 1 )
+custom_colors/font_color_hover = Color( 0, 0, 0, 1 )
+custom_colors/font_color_pressed = Color( 0, 0, 0, 1 )
+disabled = true
+icon = ExtResource( 4 )
+expand_icon = true
 
 [node name="MissEffect" type="Control" parent="M/Customization/Group/H"]
 margin_top = 318.0
@@ -2095,6 +2114,7 @@ rect_min_size = Vector2( 200, 32 )
 margin_right = 200.0
 margin_bottom = 32.0
 rect_min_size = Vector2( 200, 32 )
+rect_pivot_offset = Vector2( -432, 104 )
 theme = ExtResource( 1 )
 custom_colors/font_color_focus = Color( 0, 0, 0, 1 )
 custom_colors/font_color = Color( 0, 0, 0, 1 )
@@ -2103,16 +2123,6 @@ custom_colors/font_color_pressed = Color( 0, 0, 0, 1 )
 text = "Click to replace"
 script = ExtResource( 45 )
 default_image = ExtResource( 15 )
-
-[node name="OpenFile" type="Node" parent="M/Customization/Group/H/CustomCursor/CustomCursor"]
-script = ExtResource( 46 )
-title = "Select file"
-initial_path = "~/Downloads"
-filters = PoolStringArray( "*.png, *.jpg, *.jpeg, *.webp, *.bmp ; Image files" )
-
-[node name="SaveFile" type="Node" parent="M/Customization/Group/H/CustomCursor/CustomCursor"]
-script = ExtResource( 7 )
-title = "Save file..."
 
 [node name="Label" type="Label" parent="M/Customization/Group/H/CustomCursor/CustomCursor"]
 margin_left = -149.0
@@ -2128,8 +2138,8 @@ valign = 1
 clip_text = true
 
 [node name="Desc" type="Label" parent="M/Customization/Group/H/CustomCursor/CustomCursor"]
-margin_left = 257.0
-margin_right = 321.0
+margin_left = 294.0
+margin_right = 672.0
 margin_bottom = 32.0
 focus_mode = 2
 theme = ExtResource( 1 )
@@ -2163,6 +2173,21 @@ anchor_bottom = 1.0
 texture = ExtResource( 4 )
 expand = true
 stretch_mode = 4
+
+[node name="Clear" type="Button" parent="M/Customization/Group/H/CustomCursor/CustomCursor"]
+anchor_left = 1.0
+anchor_right = 1.0
+margin_left = 42.0
+margin_right = 74.0
+margin_bottom = 32.0
+theme = ExtResource( 1 )
+custom_colors/font_color_focus = Color( 0, 0, 0, 1 )
+custom_colors/font_color = Color( 0, 0, 0, 1 )
+custom_colors/font_color_hover = Color( 0, 0, 0, 1 )
+custom_colors/font_color_pressed = Color( 0, 0, 0, 1 )
+disabled = true
+icon = ExtResource( 4 )
+expand_icon = true
 
 [node name="CursorColorType" type="Control" parent="M/Customization/Group/H"]
 margin_top = 436.0
@@ -2534,6 +2559,7 @@ rect_min_size = Vector2( 200, 32 )
 margin_right = 200.0
 margin_bottom = 32.0
 rect_min_size = Vector2( 200, 32 )
+rect_pivot_offset = Vector2( 89, 16 )
 theme = ExtResource( 1 )
 custom_colors/font_color_focus = Color( 0, 0, 0, 1 )
 custom_colors/font_color = Color( 0, 0, 0, 1 )
@@ -2543,16 +2569,6 @@ text = "Click to replace"
 script = ExtResource( 45 )
 target = "touch"
 default_image = ExtResource( 15 )
-
-[node name="OpenFile" type="Node" parent="M/Customization/Group/H/TouchIndicator/TouchIndicator"]
-script = ExtResource( 46 )
-title = "Select file"
-initial_path = "~/Downloads"
-filters = PoolStringArray( "*.png, *.jpg, *.jpeg, *.webp, *.bmp ; Image files" )
-
-[node name="SaveFile" type="Node" parent="M/Customization/Group/H/TouchIndicator/TouchIndicator"]
-script = ExtResource( 7 )
-title = "Save file..."
 
 [node name="Label" type="Label" parent="M/Customization/Group/H/TouchIndicator/TouchIndicator"]
 margin_left = -149.0
@@ -2578,8 +2594,8 @@ expand = true
 stretch_mode = 1
 
 [node name="Desc" type="Label" parent="M/Customization/Group/H/TouchIndicator/TouchIndicator"]
-margin_left = 257.0
-margin_right = 321.0
+margin_left = 294.0
+margin_right = 703.0
 margin_bottom = 32.0
 focus_mode = 2
 theme = ExtResource( 1 )
@@ -2588,6 +2604,21 @@ custom_colors/font_color_shadow = Color( 0, 0, 0, 0 )
 custom_fonts/font = SubResource( 4 )
 text = "this is the image that shows up under your finger on a touchscreen"
 valign = 1
+
+[node name="Clear" type="Button" parent="M/Customization/Group/H/TouchIndicator/TouchIndicator"]
+anchor_left = 1.0
+anchor_right = 1.0
+margin_left = 42.0
+margin_right = 74.0
+margin_bottom = 32.0
+theme = ExtResource( 1 )
+custom_colors/font_color_focus = Color( 0, 0, 0, 1 )
+custom_colors/font_color = Color( 0, 0, 0, 1 )
+custom_colors/font_color_hover = Color( 0, 0, 0, 1 )
+custom_colors/font_color_pressed = Color( 0, 0, 0, 1 )
+disabled = true
+icon = ExtResource( 4 )
+expand_icon = true
 
 [node name="Audio" type="VBoxContainer" parent="M"]
 margin_top = 1914.0
@@ -5946,9 +5977,6 @@ text = "FPS Limit"
 align = 2
 valign = 1
 clip_text = true
-__meta__ = {
-"_edit_use_anchors_": false
-}
 
 [node name="Desc" type="Label" parent="M/Graphics/Group/H/TargetFPS/Sensitivity"]
 margin_left = 215.0
@@ -5965,7 +5993,7 @@ valign = 1
 [node name="Experimental" type="VBoxContainer" parent="M"]
 margin_top = 4858.0
 margin_right = 1280.0
-margin_bottom = 5035.0
+margin_bottom = 5099.0
 script = ExtResource( 43 )
 
 [node name="Title" type="MarginContainer" parent="M/Experimental"]
@@ -5994,13 +6022,13 @@ flat = true
 [node name="Group" type="MarginContainer" parent="M/Experimental"]
 margin_top = 36.0
 margin_right = 1280.0
-margin_bottom = 177.0
+margin_bottom = 209.0
 custom_constants/margin_left = 180
 
 [node name="H" type="GridContainer" parent="M/Experimental/Group"]
 margin_left = 180.0
 margin_right = 1280.0
-margin_bottom = 141.0
+margin_bottom = 173.0
 
 [node name="ExpWarning" type="MarginContainer" parent="M/Experimental/Group/H"]
 margin_right = 827.0
@@ -6070,10 +6098,84 @@ custom_colors/font_color_shadow = Color( 0, 0, 0, 0 )
 custom_fonts/font = SubResource( 49 )
 text = "These features aren't completely ready yet, and could be very buggy, unstable, or just not work at all. Use them at your own risk."
 
-[node name="Avatar" type="Control" parent="M/Experimental/Group/H"]
+[node name="HitSync" type="CheckBox" parent="M/Experimental/Group/H"]
 margin_top = 109.0
 margin_right = 827.0
-margin_bottom = 141.0
+margin_bottom = 137.0
+rect_min_size = Vector2( 0, 28 )
+theme = ExtResource( 1 )
+custom_colors/font_color_disabled = Color( 0.690196, 0.690196, 0.690196, 1 )
+custom_colors/font_color_focus = Color( 0.690196, 0.690196, 0.690196, 1 )
+custom_colors/font_color_hover_pressed = Color( 0.690196, 0.690196, 0.690196, 1 )
+custom_colors/font_color = Color( 0.690196, 0.690196, 0.690196, 1 )
+custom_colors/font_color_hover = Color( 0.690196, 0.690196, 0.690196, 1 )
+custom_colors/font_color_pressed = Color( 0.690196, 0.690196, 0.690196, 1 )
+custom_fonts/font = SubResource( 4 )
+action_mode = 0
+text = "ensure that hitsounds are always (near-perfectly) synced to the map"
+flat = true
+script = ExtResource( 54 )
+target = "ensure_hitsync"
+
+[node name="Label" type="Label" parent="M/Experimental/Group/H/HitSync"]
+anchor_bottom = 1.0
+margin_left = -165.0
+margin_right = -10.0
+focus_mode = 2
+theme = ExtResource( 1 )
+custom_colors/font_color = Color( 0.898039, 0.94902, 1, 1 )
+custom_fonts/font = SubResource( 3 )
+text = "Ensure Hitsync"
+align = 2
+valign = 1
+clip_text = true
+
+[node name="HitsyncOffset" type="SpinBox" parent="M/Experimental/Group/H"]
+visible = false
+margin_top = 141.0
+margin_right = 200.0
+margin_bottom = 173.0
+rect_min_size = Vector2( 200, 32 )
+rect_pivot_offset = Vector2( 286, 160 )
+focus_mode = 2
+size_flags_horizontal = 0
+size_flags_vertical = 0
+theme = ExtResource( 1 )
+max_value = 300.0
+allow_greater = true
+allow_lesser = true
+suffix = "ms"
+script = ExtResource( 44 )
+
+[node name="Label" type="Label" parent="M/Experimental/Group/H/HitsyncOffset"]
+margin_left = -146.0
+margin_right = -10.0
+margin_bottom = 32.0
+focus_mode = 2
+theme = ExtResource( 1 )
+custom_colors/font_color = Color( 0.898039, 0.94902, 1, 1 )
+custom_fonts/font = SubResource( 3 )
+text = "Hitsync Offset"
+align = 2
+valign = 1
+clip_text = true
+
+[node name="Desc" type="Label" parent="M/Experimental/Group/H/HitsyncOffset"]
+margin_left = 215.0
+margin_right = 562.0
+margin_bottom = 32.0
+focus_mode = 2
+theme = ExtResource( 1 )
+custom_colors/font_color = Color( 0.690196, 0.690196, 0.690196, 1 )
+custom_colors/font_color_shadow = Color( 0, 0, 0, 0 )
+custom_fonts/font = SubResource( 4 )
+text = "[def. 0 ms] offsets the synced hitsound (ensure hitsync must be enabled; positive only)"
+valign = 1
+
+[node name="Avatar" type="Control" parent="M/Experimental/Group/H"]
+margin_top = 141.0
+margin_right = 827.0
+margin_bottom = 173.0
 rect_min_size = Vector2( 200, 32 )
 
 [node name="Editor" type="Button" parent="M/Experimental/Group/H/Avatar"]
@@ -6124,7 +6226,7 @@ text = "literally you | experimental avatar editor. nowhere near done. visible i
 valign = 1
 
 [node name="BottomMargin" type="Control" parent="."]
-margin_top = 5098.0
+margin_top = 5162.0
 margin_right = 1280.0
-margin_bottom = 5194.0
+margin_bottom = 5258.0
 rect_min_size = Vector2( 0, 96 )
