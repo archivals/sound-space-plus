@@ -921,13 +921,13 @@ flat = true
 [node name="Group" type="MarginContainer" parent="M/Camera"]
 margin_top = 36.0
 margin_right = 1280.0
-margin_bottom = 624.0
+margin_bottom = 656.0
 custom_constants/margin_left = 180
 
 [node name="H" type="GridContainer" parent="M/Camera/Group"]
 margin_left = 180.0
 margin_right = 1280.0
-margin_bottom = 588.0
+margin_bottom = 620.0
 
 [node name="Sensitivity" type="Control" parent="M/Camera/Group/H"]
 margin_right = 483.0
@@ -1355,17 +1355,51 @@ __meta__ = {
 "_edit_use_anchors_": false
 }
 
-[node name="SEPARATOR3" type="HSeparator" parent="M/Camera/Group/H"]
+[node name="BufferParallax" type="CheckBox" parent="M/Camera/Group/H"]
 margin_top = 394.0
 margin_right = 483.0
-margin_bottom = 404.0
+margin_bottom = 422.0
+rect_min_size = Vector2( 0, 28 )
+theme = ExtResource( 1 )
+custom_colors/font_color_disabled = Color( 0.690196, 0.690196, 0.690196, 1 )
+custom_colors/font_color_focus = Color( 0.690196, 0.690196, 0.690196, 1 )
+custom_colors/font_color_hover_pressed = Color( 0.690196, 0.690196, 0.690196, 1 )
+custom_colors/font_color = Color( 0.690196, 0.690196, 0.690196, 1 )
+custom_colors/font_color_hover = Color( 0.690196, 0.690196, 0.690196, 1 )
+custom_colors/font_color_pressed = Color( 0.690196, 0.690196, 0.690196, 1 )
+custom_fonts/font = SubResource( 4 )
+pressed = true
+action_mode = 0
+text = "makes the parallax follow the buffer cursor instead of the real one"
+flat = true
+script = ExtResource( 54 )
+target = "follow_drift_cursor"
+
+[node name="Label" type="Label" parent="M/Camera/Group/H/BufferParallax"]
+anchor_bottom = 1.0
+margin_left = -150.0
+margin_right = -10.0
+grow_horizontal = 0
+focus_mode = 2
+theme = ExtResource( 1 )
+custom_colors/font_color = Color( 0.898039, 0.94902, 1, 1 )
+custom_fonts/font = SubResource( 3 )
+text = "Follow Buffer Cursor"
+align = 2
+valign = 1
+clip_text = true
+
+[node name="SEPARATOR3" type="HSeparator" parent="M/Camera/Group/H"]
+margin_top = 426.0
+margin_right = 483.0
+margin_bottom = 436.0
 rect_min_size = Vector2( 0, 10 )
 custom_styles/separator = SubResource( 55 )
 
 [node name="FOV" type="Control" parent="M/Camera/Group/H"]
-margin_top = 408.0
+margin_top = 440.0
 margin_right = 483.0
-margin_bottom = 440.0
+margin_bottom = 472.0
 rect_min_size = Vector2( 200, 32 )
 
 [node name="FOV" type="SpinBox" parent="M/Camera/Group/H/FOV"]
@@ -1410,9 +1444,9 @@ text = "[def. 70] you know what this does"
 valign = 1
 
 [node name="HitFOV" type="CheckBox" parent="M/Camera/Group/H"]
-margin_top = 444.0
+margin_top = 476.0
 margin_right = 483.0
-margin_bottom = 472.0
+margin_bottom = 504.0
 rect_min_size = Vector2( 0, 28 )
 theme = ExtResource( 1 )
 custom_colors/font_color_disabled = Color( 0.690196, 0.690196, 0.690196, 1 )
@@ -1443,9 +1477,9 @@ valign = 1
 clip_text = true
 
 [node name="HitFOVMode" type="Control" parent="M/Camera/Group/H"]
-margin_top = 476.0
+margin_top = 508.0
 margin_right = 483.0
-margin_bottom = 516.0
+margin_bottom = 548.0
 rect_min_size = Vector2( 200, 40 )
 
 [node name="Presets" type="MenuButton" parent="M/Camera/Group/H/HitFOVMode"]
@@ -1489,9 +1523,9 @@ text = "Mode: Additive"
 valign = 1
 
 [node name="HitFOVAmplifier" type="SpinBox" parent="M/Camera/Group/H"]
-margin_top = 520.0
+margin_top = 552.0
 margin_right = 200.0
-margin_bottom = 552.0
+margin_bottom = 584.0
 rect_min_size = Vector2( 200, 32 )
 rect_pivot_offset = Vector2( 286, -108 )
 focus_mode = 2
@@ -1530,9 +1564,9 @@ text = "[def. 2] how intense is the hit FOV pulsing is"
 valign = 1
 
 [node name="HitFOVDecay" type="SpinBox" parent="M/Camera/Group/H"]
-margin_top = 556.0
+margin_top = 588.0
 margin_right = 200.0
-margin_bottom = 588.0
+margin_bottom = 620.0
 rect_min_size = Vector2( 200, 32 )
 rect_pivot_offset = Vector2( 286, -108 )
 focus_mode = 2
