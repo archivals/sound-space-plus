@@ -174,7 +174,18 @@ func _ready():
 	$Hit.stream = SSP.hit_snd
 	$Miss2D.stream = SSP.miss_snd
 	$Hit2D.stream = SSP.hit_snd
-	$Note/Mesh.mesh = load(SSP.selected_mesh.path)
+	print(SSP.selected_mesh.path)
+	if "user://" in SSP.selected_mesh.path:
+		var m = ObjParse.load_obj(SSP.selected_mesh.path)
+		print(m)
+		if m != null:
+			$Note/Mesh.mesh = m
+		else:
+			$Note/Mesh.mesh = load("res://content/blocks/rounded.obj")
+	else:
+		$Note/Mesh.mesh = load(SSP.selected_mesh.path)
+		print(SSP.note_size)
+		$Note/Mesh.scale *= SSP.note_size
 	
 	var m:ShaderMaterial = $Note.solid_mat
 	var mt:ShaderMaterial = $Note.transparent_mat
