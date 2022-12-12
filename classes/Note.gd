@@ -28,7 +28,7 @@ var mat_t:ShaderMaterial
 
 func linstep(a:float,b:float,x:float):
 	if a == b: return float(x >= a)
-	return clamp(abs((x - a) / (b - a)),0,1)
+	return clamp(((x - a) / (b - a)),0,1)
 
 func reposition(ms:float,approachSpeed:float):
 	approachSpeed /= speed_multi
@@ -128,6 +128,10 @@ func setup(color:Color):
 		if SSP.fade_length != 0: 
 			fade_in_start = SSP.spawn_distance
 			fade_in_end = SSP.spawn_distance*(1.0 - SSP.fade_length)
+
+func _ready():
+	if !SSP.note_visual_approach && has_node("Approach"):
+		$Approach.queue_free()
 
 func _process(delta):
 	if visible:

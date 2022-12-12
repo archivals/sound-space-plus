@@ -2,8 +2,6 @@ extends Panel
 
 var dir:Directory = Directory.new()
 var file:File = File.new()
-onready var openFile = $FileDialog
-onready var openFolder = $FolderDialog
 
 export(Texture) var cover_placeholder
 
@@ -52,7 +50,7 @@ func check_txt_requirements():
 		$TxtFile/done.disabled = true
 		$TxtFile/done/Title.text = "Mapper required"
 	else:
-		if SSP.registry_song.idx_id.has(song.id):
+		if SSP.registry_song.idx_id.has(song.id) and !SSP.registry_song.get_item(song.id).is_online:
 			$TxtFile/done.disabled = true
 			$TxtFile/done/Title.text = "ID in use"
 		else:
@@ -159,12 +157,13 @@ func select_type(type:int):
 	elif type == T_SSPM:
 		print("opening sspm")
 		opening = FO_SSPM
-		openFile.clear_filters()
-		openFile.add_filter("*.sspm ; Sound Space+ map")
-		openFile.initial_path = "~/Downloads"
-		openFile.title = "Select SS+ map..."
-		openFile.multiselect = false
-		openFile.show()
+		Globals.file_sel.open_file(
+			self,
+			"file_selected",
+			PoolStringArray(["*.sspm ; Sound Space+ map"]),
+			false,
+			"~/Downloads"
+		)
 	elif type == T_TXT:
 		reset_text_edit_screen()
 		maptype = T_TXT
@@ -179,35 +178,41 @@ func sel_filetype(type:int):
 		if type == F_ZIP:
 			print("opening vulnus zip")
 			opening = FO_VZIP
-			openFile.clear_filters()
-			openFile.add_filter("*.zip, *.rar, *.7z, *.gz, *.vmap ; archive files")
-			openFile.initial_path = "~/Downloads"
-			openFile.title = "Select Vulnus map..."
-			openFile.multiselect = false
-			openFile.show()
+			Globals.file_sel.open_file(
+				self,
+				"file_selected",
+				PoolStringArray(["*.zip, *.rar, *.7z, *.gz, *.vmap ; archive files"]),
+				false,
+				"~/Downloads"
+			)
 		elif type == F_DIR:
 			print("opening vulnus folder")
 			opening = FO_VDIR
-			openFolder.initial_path = "~/Downloads"
-			openFolder.title = "Select Vulnus map..."
-			openFolder.show()
+			
+			Globals.file_sel.open_folder(
+				self,
+				"folder_selected",
+				"~/Downloads"
+			)
 	elif maptype == T_TXT:
 		if type == FO_TXT:
 			opening = FO_TXT
-			openFile.clear_filters()
-			openFile.add_filter("*.txt ; Text files")
-			openFile.initial_path = "~/Downloads"
-			openFile.title = "Select map data..."
-			openFile.multiselect = false
-			openFile.show()
+			Globals.file_sel.open_file(
+				self,
+				"file_selected",
+				PoolStringArray(["*.txt ; Text files"]),
+				false,
+				"~/Downloads"
+			)
 		elif type == FO_SONG:
 			opening = FO_SONG
-			openFile.clear_filters()
-			openFile.add_filter("*.mp3, *.ogg ; Audio files")
-			openFile.initial_path = "~/Downloads"
-			openFile.title = "Select music..."
-			openFile.multiselect = false
-			openFile.show()
+			Globals.file_sel.open_file(
+				self,
+				"file_selected",
+				PoolStringArray(["*.mp3, *.ogg ; Audio files"]),
+				false,
+				"~/Downloads"
+			)
 
 const valid_chars = "0123456789abcdefghijklmnopqrstuvwxyz_-"
 
@@ -264,27 +269,34 @@ func import_vulnus_folder():
 	
 	dir.open(path)
 	if !dir.file_exists("meta.json"):
-		print("Possible nested folder - searching for meta.json")
+		print("Possible nested folder - searching for meta.json AAAAAAAAAAAAAAAAAAAA")
 		yield(get_tree(),"idle_frame")
+		print('list_dir_begin before')
+		dir.list_dir_begin()
 		var n = dir.get_next()
 		while n:
+			n = dir.get_next()
+			print(n)
 			if dir.file_exists(n.plus_file("meta.json")):
 				print("Found meta.json in '%s'" % n)
 				yield(get_tree(),"idle_frame")
 				path = path.plus_file(n)
 				break
-		if path == "user://temp": # Meta.json wasn't found anywhere
+		dir.list_dir_end()
+		if path == Globals.p("user://temp"): # Meta.json wasn't found anywhere
 			print("couldn't find meta.json")
 			$VulnusFile/Error.text = "Missing meta.json (check if the zip file contains a folder, and, if it does, extract it)"
 			$VulnusFile/Error.visible = true
 			return
+		else:
+			print("found meta.json at %s" % path)
 	
 	print("Located! Loading meta.json...")
 	yield(get_tree(),"idle_frame")
 	var res = file.open(path.plus_file("meta.json"),File.READ)
 	if res != OK:
 		print("meta.json: file open error %s" % res)
-		$VulnusFile/Error.text = "meta.json: error opening file (file error %s) % res"
+		$VulnusFile/Error.text = "meta.json: error opening file (file error %s)" % res
 		$VulnusFile/Error.visible = true
 		return
 	
@@ -384,12 +396,35 @@ func file_selected(files:PoolStringArray):
 			
 			print("Making temp dir")
 			yield(get_tree(),"idle_frame")
-			dir.open("user://")
-			if dir.dir_exists("user://temp"):
+			dir.open(Globals.p("user://"))
+			if dir.dir_exists(Globals.p("user://temp")):
 				print("Removing old temp dir")
 				yield(get_tree(),"idle_frame")
-				dir.remove("user://temp")
-			dir.make_dir("user://temp")
+				var found = Globals.get_files_recursive(
+					[Globals.p("user://temp")]
+				)
+				for p in found.files:
+					var res:int = dir.remove(p)
+					if res != OK:
+						print("file delete returned error %s for file '%s'" % [res,p])
+						$VulnusFile/Error.text = "failed to delete temp folder, file remove error %s" % [res]
+						$VulnusFile/Error.visible = true
+						return
+				found.folders.invert()
+				for p in found.folders:
+					var res:int = dir.remove(p)
+					if res != OK:
+						print("file delete returned error %s for folder '%s'" % [res,p])
+						$VulnusFile/Error.text = "failed to delete temp folder, folder remove error %s" % [res]
+						$VulnusFile/Error.visible = true
+						return
+				var res:int = dir.remove(Globals.p("user://temp"))
+				if res != OK:
+					print("file delete returned error %s for temp dir" % [res])
+					$VulnusFile/Error.text = "failed to delete temp folder, folder remove error %s" % [res]
+					$VulnusFile/Error.visible = true
+					return
+			dir.make_dir(Globals.p("user://temp"))
 			
 			print("Extracting zip file...")
 			yield(get_tree(),"idle_frame")
@@ -400,7 +435,7 @@ func file_selected(files:PoolStringArray):
 				if binarypath.begins_with("install_dir/"):
 					binarypath = OS.get_executable_path().get_base_dir().plus_file(binarypath.trim_prefix("install_dir/"))
 				
-				var outpath:String = ProjectSettings.globalize_path("user://temp")
+				var outpath:String = ProjectSettings.globalize_path(Globals.p("user://temp"))
 				var inpath:String = ProjectSettings.globalize_path(files[0])
 				
 				if inpath.ends_with(".vmap"):
@@ -415,18 +450,26 @@ func file_selected(files:PoolStringArray):
 				
 				
 				var args = [
-					# x -bb0 -y -bd ./Dimrain47_-_at_the_speed_of_light.zip *
 					'x',
 					'-bb0',
 					'-y',
 					'-bd',
-					'-o"%s"' % [ProjectSettings.globalize_path("user://temp")],
+					'-o"%s"' % [ProjectSettings.globalize_path(Globals.p("user://temp"))],
 					'"%s"' % [files[0].replace("\\","/")],
 					'*'
 				]
-				var exit_code = OS.execute(binarypath, args, true, output)
+				print(binarypath)
+				var exit_code = OS.execute(binarypath, args, true, output, true, OS.has_feature("debug"))
 				
-				if exit_code != 0:
+				for o in output:
+					print(o)
+				
+				if exit_code == -1:
+					print("nonzero exit code of -1 indicateds engine error")
+					$VulnusFile/Error.text = "engine error while extracting zip"
+					$VulnusFile/Error.visible = true
+					return
+				elif exit_code != 0:
 					print("nonzero exit code of %s" % [exit_code])
 					$VulnusFile/Error.text = "error occurred while extracting zip (exit code %s)" % [exit_code]
 					$VulnusFile/Error.visible = true
@@ -437,7 +480,7 @@ func file_selected(files:PoolStringArray):
 				$VulnusFile/Error.visible = true
 				return
 			
-			path = "user://temp"
+			path = Globals.p("user://temp")
 			import_vulnus_folder()
 		FO_VDIR:
 			$VulnusFile/Success.visible = false
@@ -606,14 +649,14 @@ func set_use_cover(v:bool):
 	song.has_cover = v
 
 func do_coversel():
-	openFile.hide()
 	opening = FO_COVER
-	openFile.clear_filters()
-	openFile.add_filter("*.png, *.jpg, *.jpeg, *.webp, *.bmp ; Image files")
-	openFile.initial_path = "~/Downloads"
-	openFile.title = "Select cover image"
-	openFile.multiselect = false
-	openFile.show()
+	Globals.file_sel.open_file(
+		self,
+		"file_selected",
+		PoolStringArray(["*.png, *.jpg, *.jpeg, *.webp, *.bmp ; Image files"]),
+		false,
+		"~/Downloads"
+	)
 
 func finish_map():
 	$TxtFile/H/audio/player.stop()
@@ -629,6 +672,7 @@ func finish_map():
 	if (maptype == T_TXT and $TxtFile/H/Temp.pressed):
 		song.discard_notes()
 		song.read_notes()
+		SSP.registry_song.check_and_remove_id(song.id)
 		SSP.registry_song.add_item(song)
 		$Finish/Wait.visible = false
 		$Finish/Success.visible = true
@@ -638,6 +682,7 @@ func finish_map():
 	
 		$Finish/Wait.visible = false
 		if result == "Converted!":
+			SSP.registry_song.check_and_remove_id(song.id)
 			SSP.registry_song.add_sspm_map("user://maps/%s.sspm" % song.id)
 			$Finish/Success.visible = true
 		else:
@@ -647,7 +692,7 @@ func finish_map():
 
 func back_to_menu():
 	get_parent().black_fade_target = true
-	yield(get_tree().create_timer(1),"timeout")
+	yield(get_tree().create_timer(0.35),"timeout")
 	SSP.conmgr_transit = null
 	get_tree().change_scene("res://menuload.tscn")
 
@@ -708,9 +753,6 @@ func _ready():
 	$TxtFile/cancel.connect("pressed",self,"onopen")
 	$VulnusFile/cancel.connect("pressed",self,"onopen")
 	$Finish/ok.connect("pressed",self,"onopen")
-	
-	openFile.connect("files_selected",self,"file_selected")
-	openFolder.connect("folder_selected",self,"folder_selected")
 	
 #	call_deferred("add_child",openFile)
 #	call_deferred("add_child",openFolder)

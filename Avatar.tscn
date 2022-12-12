@@ -15,7 +15,7 @@ flags_unshaded = true
 
 [sub_resource type="Shader" id=80]
 code = "shader_type spatial;
-render_mode blend_mix,cull_back,diffuse_burley,specular_disabled,unshaded,depth_test_disable;
+render_mode blend_mix,cull_back,diffuse_burley,specular_disabled,unshaded;
 uniform vec4 notecolor : hint_color = vec4(1,1,1,1);
 
 uniform float alpha_multi = 1;
@@ -371,6 +371,12 @@ material/0 = SubResource( 67 )
 
 [node name="Shirts" parent="Torso" instance=ExtResource( 3 )]
 script = ExtResource( 8 )
+
+[node name="Top" parent="Torso/Shirts/CubellaBikini" index="0"]
+transform = Transform( 1.49987, 0.0065448, 0, -0.01959, 0.498828, -0.0503826, -0.00131898, 0.0335856, 0.748306, 0, 0.2, -0.75 )
+
+[node name="Strap" parent="Torso/Shirts/CubellaBikini" index="1"]
+transform = Transform( 1.1, 0, 0, 0, 0.1, 0, 0, 0, 1.1, 0, 0.4, 0 )
 
 [node name="ArmL" type="Spatial" parent="."]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -0.5, -0.5, 2 )
