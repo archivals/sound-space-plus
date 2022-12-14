@@ -42,7 +42,7 @@ func to_old_menu():
 			Globals.notify(Globals.NOTIFY_WARN,"No selected song","Automatically selecting a song")
 			SSP.select_song(SSP.registry_song.items[0])
 		SSP.menu_target = "res://classes/cursordance/dancetest.tscn"
-	else: SSP.menu_target = "res://menu.tscn"
+	else: SSP.menu_target = "res://menu3d.tscn"
 	yield(get_tree().create_timer(0.35),"timeout")
 	get_tree().change_scene("res://menuload.tscn")
 

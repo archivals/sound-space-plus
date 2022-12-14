@@ -1,0 +1,61 @@
+[gd_scene load_steps=8 format=2]
+
+[ext_resource path="res://MapRegistry.tscn" type="PackedScene" id=1]
+[ext_resource path="res://game/CameraMenu.gd" type="Script" id=2]
+[ext_resource path="res://menu3d/meme_thing_remove_when_designing.gd" type="Script" id=4]
+[ext_resource path="res://content/ui/settings_error.png" type="Texture" id=5]
+
+[sub_resource type="ViewportTexture" id=1]
+viewport_path = NodePath("HUD/SongSelectViewport")
+
+[sub_resource type="PanoramaSky" id=2]
+panorama = ExtResource( 5 )
+
+[sub_resource type="Environment" id=3]
+background_mode = 2
+background_sky = SubResource( 2 )
+background_sky_orientation = Basis( -1, 0, -8.74228e-08, 0, 1, 0, 8.74228e-08, 0, -1 )
+
+[node name="Spatial" type="Spatial"]
+
+[node name="Position" type="Position3D" parent="."]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -2 )
+
+[node name="Camera" type="Camera" parent="."]
+current = true
+script = ExtResource( 2 )
+
+[node name="RayCast" type="RayCast" parent="Camera"]
+
+[node name="HUD" type="Spatial" parent="."]
+
+[node name="SongSelectTexture" type="Sprite3D" parent="HUD"]
+transform = Transform( -1, 8.74228e-08, 1.74846e-07, -8.74228e-08, -1, 0, 1.74846e-07, -1.52855e-14, 1, 0, 0, -10.1926 )
+generate_lightmap = false
+flip_h = true
+double_sided = false
+alpha_cut = 2
+texture = SubResource( 1 )
+
+[node name="SongSelectViewport" type="Viewport" parent="HUD"]
+size = Vector2( 1200, 800 )
+transparent_bg = true
+fxaa = true
+hdr = false
+usage = 0
+debug_draw = 1
+
+[node name="Panel" type="Panel" parent="HUD/SongSelectViewport"]
+modulate = Color( 0, 0, 0, 0.388235 )
+show_behind_parent = true
+anchor_right = 1.0
+anchor_bottom = 1.0
+margin_right = 40.0
+margin_bottom = 40.0
+
+[node name="MapRegistry" parent="HUD/SongSelectViewport" instance=ExtResource( 1 )]
+visible = true
+
+[node name="WorldEnvironment" type="WorldEnvironment" parent="."]
+environment = SubResource( 3 )
+script = ExtResource( 4 )

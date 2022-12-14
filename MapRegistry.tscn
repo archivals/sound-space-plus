@@ -1,0 +1,1477 @@
+[gd_scene load_steps=53 format=2]
+
+[ext_resource path="res://font/Lato/Lato-Regular.ttf" type="DynamicFontData" id=1]
+[ext_resource path="res://font/Noto_Sans_JP/NotoSansJP-Medium.otf" type="DynamicFontData" id=2]
+[ext_resource path="res://menu2/rainbow.gd" type="Script" id=3]
+[ext_resource path="res://menuButtons/v2MapList.gd" type="Script" id=4]
+[ext_resource path="res://uitheme.tres" type="Theme" id=5]
+[ext_resource path="res://content/sfx/hit.wav" type="AudioStream" id=6]
+[ext_resource path="res://menuButtons/diffSort.gd" type="Script" id=7]
+[ext_resource path="res://content/ui/favorite.png" type="Texture" id=8]
+[ext_resource path="res://tiles.png" type="Texture" id=9]
+[ext_resource path="res://menuButtons/PlayAutoSwitch.gd" type="Script" id=10]
+[ext_resource path="res://menuButtons/MapIcon.gd" type="Script" id=11]
+[ext_resource path="res://content/ui/arrow_up.png" type="Texture" id=12]
+[ext_resource path="res://menuButtons/NameSort.gd" type="Script" id=13]
+[ext_resource path="res://menuButtons/DifficultySort.gd" type="Script" id=14]
+[ext_resource path="res://font/Lato/Lato-Black.ttf" type="DynamicFontData" id=15]
+[ext_resource path="res://menuButtons/MapSearch.gd" type="Script" id=16]
+[ext_resource path="res://content/ui/cloud_32.png" type="Texture" id=17]
+[ext_resource path="res://menu2/AuthorSearch.gd" type="Script" id=18]
+[ext_resource path="res://menu2/SearchOnline.gd" type="Script" id=19]
+[ext_resource path="res://content/ui/arrow_down.png" type="Texture" id=20]
+[ext_resource path="res://menuButtons/MapIncludeBroken.gd" type="Script" id=21]
+
+[sub_resource type="StyleBoxFlat" id=59]
+draw_center = false
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+border_color = Color( 1, 1, 1, 1 )
+
+[sub_resource type="Shader" id=128]
+code = "shader_type canvas_item;
+
+void fragment() {
+	vec2 muv = (UV - vec2(0.5)) * 2.0;
+	float m = 1.0 - max(abs(muv.x),abs(muv.y));
+	COLOR = texture(TEXTURE,UV)*(1.0 + clamp((m*1.5+0.5),0,1.0))/2.0;
+}"
+
+[sub_resource type="ShaderMaterial" id=60]
+shader = SubResource( 128 )
+
+[sub_resource type="DynamicFont" id=61]
+outline_size = 1
+outline_color = Color( 0, 0, 0, 0.207843 )
+use_filter = true
+font_data = ExtResource( 15 )
+
+[sub_resource type="Shader" id=129]
+code = "shader_type canvas_item;
+
+void fragment() {
+	vec2 uv = UV + vec2(TIME * -0.2);
+	COLOR.rgb = texture(TEXTURE,UV).rgb * (0.75 + (0.25 * sin(length(uv*6.285))));
+}"
+
+[sub_resource type="ShaderMaterial" id=62]
+shader = SubResource( 129 )
+
+[sub_resource type="StyleBoxFlat" id=63]
+bg_color = Color( 0.6, 0.6, 0.6, 0.0941176 )
+
+[sub_resource type="StyleBoxEmpty" id=64]
+
+[sub_resource type="StyleBoxEmpty" id=65]
+
+[sub_resource type="StyleBoxEmpty" id=66]
+
+[sub_resource type="ButtonGroup" id=67]
+
+[sub_resource type="DynamicFont" id=68]
+outline_size = 1
+outline_color = Color( 0, 0, 0, 0.207843 )
+use_filter = true
+font_data = ExtResource( 2 )
+
+[sub_resource type="DynamicFont" id=69]
+size = 14
+font_data = ExtResource( 1 )
+
+[sub_resource type="StyleBoxFlat" id=70]
+draw_center = false
+border_width_left = 6
+border_width_top = 6
+border_width_right = 6
+border_width_bottom = 6
+border_color = Color( 1, 1, 1, 1 )
+
+[sub_resource type="DynamicFont" id=71]
+size = 32
+outline_size = 3
+outline_color = Color( 0, 0, 0, 0.207843 )
+use_filter = true
+font_data = ExtResource( 15 )
+
+[sub_resource type="Shader" id=130]
+code = "shader_type canvas_item;
+
+void fragment() {
+	vec2 muv = (UV - vec2(0.5)) * 2.0;
+	float m = 1.0 - max(abs(muv.x),abs(muv.y));
+	COLOR = vec4(vec3((0.5 + clamp((m*1.5+0.5),0.0,1.0)/2.0)),1.0) * texture(TEXTURE,UV);
+}"
+
+[sub_resource type="ShaderMaterial" id=72]
+shader = SubResource( 130 )
+
+[sub_resource type="StyleBoxFlat" id=73]
+bg_color = Color( 1, 1, 0.937255, 0.333333 )
+border_width_left = 6
+border_width_top = 6
+border_width_right = 6
+border_width_bottom = 6
+border_color = Color( 1, 1, 1, 1 )
+border_blend = true
+expand_margin_left = 2.0
+expand_margin_right = 2.0
+expand_margin_top = 2.0
+expand_margin_bottom = 2.0
+
+[sub_resource type="DynamicFont" id=74]
+size = 14
+outline_size = 2
+outline_color = Color( 0, 0, 0, 0.207843 )
+use_filter = true
+font_data = ExtResource( 1 )
+
+[sub_resource type="DynamicFont" id=75]
+size = 32
+outline_size = 3
+outline_color = Color( 0, 0, 0, 0.207843 )
+use_filter = true
+extra_spacing_char = 1
+font_data = ExtResource( 15 )
+
+[sub_resource type="DynamicFont" id=76]
+size = 24
+outline_size = 3
+outline_color = Color( 0, 0, 0, 0.207843 )
+use_filter = true
+font_data = ExtResource( 15 )
+
+[sub_resource type="DynamicFont" id=77]
+size = 28
+outline_size = 3
+outline_color = Color( 0, 0, 0, 0.207843 )
+use_filter = true
+extra_spacing_char = 1
+font_data = ExtResource( 15 )
+
+[sub_resource type="DynamicFont" id=78]
+size = 28
+outline_size = 3
+outline_color = Color( 0, 0, 0, 0.207843 )
+use_filter = true
+font_data = ExtResource( 15 )
+
+[sub_resource type="DynamicFont" id=79]
+size = 72
+outline_size = 3
+outline_color = Color( 0, 0, 0, 0.207843 )
+use_filter = true
+extra_spacing_top = -6
+font_data = ExtResource( 2 )
+
+[sub_resource type="StyleBoxFlat" id=80]
+bg_color = Color( 0.654902, 0.654902, 0.654902, 0.588235 )
+
+[sub_resource type="StyleBoxFlat" id=81]
+bg_color = Color( 0.623529, 0.623529, 0.623529, 0.509804 )
+
+[sub_resource type="StyleBoxEmpty" id=82]
+
+[sub_resource type="StyleBoxFlat" id=83]
+bg_color = Color( 0.211765, 0.211765, 0.211765, 0.443137 )
+
+[sub_resource type="StyleBoxFlat" id=84]
+bg_color = Color( 0.503906, 0.503906, 0.503906, 0.509804 )
+
+[sub_resource type="ShortCut" id=85]
+
+[sub_resource type="DynamicFont" id=87]
+size = 18
+use_filter = true
+font_data = ExtResource( 1 )
+
+[node name="MapRegistry" type="ReferenceRect"]
+anchor_right = 1.0
+anchor_bottom = 1.0
+margin_left = 4.0
+margin_top = 4.0
+margin_bottom = -35.0
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="T" type="ReferenceRect" parent="."]
+anchor_right = 1.0
+margin_bottom = 32.0
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Search" type="LineEdit" parent="T"]
+margin_right = 180.0
+margin_bottom = 32.0
+theme = ExtResource( 5 )
+clear_button_enabled = true
+placeholder_text = "Search"
+script = ExtResource( 16 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="AuthorSearch" type="LineEdit" parent="T"]
+margin_left = 185.0
+margin_right = 310.0
+margin_bottom = 32.0
+theme = ExtResource( 5 )
+clear_button_enabled = true
+placeholder_text = "Author"
+script = ExtResource( 18 )
+
+[node name="D" type="ReferenceRect" parent="T"]
+anchor_left = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+margin_left = -202.0
+script = ExtResource( 7 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="NODIF" type="Panel" parent="T/D"]
+margin_right = 32.0
+margin_bottom = 32.0
+rect_min_size = Vector2( 32, 32 )
+custom_styles/panel = SubResource( 59 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="TextureRect" type="TextureRect" parent="T/D/NODIF"]
+modulate = Color( 0.501961, 0.501961, 0.501961, 1 )
+show_behind_parent = true
+material = SubResource( 60 )
+anchor_right = 1.0
+anchor_bottom = 1.0
+margin_left = 2.0
+margin_top = 2.0
+margin_right = -2.0
+margin_bottom = -2.0
+texture = ExtResource( 9 )
+expand = true
+__meta__ = {
+"_edit_use_anchors_": true
+}
+
+[node name="Label" type="Label" parent="T/D/NODIF"]
+anchor_right = 1.0
+anchor_bottom = 1.0
+rect_pivot_offset = Vector2( 42, 42 )
+custom_fonts/font = SubResource( 61 )
+text = "N"
+align = 1
+valign = 1
+autowrap = true
+clip_text = true
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Select" type="Button" parent="T/D/NODIF"]
+material = SubResource( 62 )
+anchor_right = 1.0
+anchor_bottom = 1.0
+custom_styles/hover = SubResource( 63 )
+custom_styles/pressed = SubResource( 63 )
+custom_styles/focus = SubResource( 64 )
+custom_styles/disabled = SubResource( 65 )
+custom_styles/normal = SubResource( 66 )
+action_mode = 0
+group = SubResource( 67 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="EASY" type="Panel" parent="T/D"]
+self_modulate = Color( 0, 1, 0, 1 )
+margin_left = 34.0
+margin_right = 66.0
+margin_bottom = 32.0
+rect_min_size = Vector2( 32, 32 )
+custom_styles/panel = SubResource( 59 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="TextureRect" type="TextureRect" parent="T/D/EASY"]
+modulate = Color( 0.501961, 0.501961, 0.501961, 1 )
+self_modulate = Color( 0, 1, 0, 1 )
+show_behind_parent = true
+material = SubResource( 60 )
+anchor_right = 1.0
+anchor_bottom = 1.0
+margin_left = 2.0
+margin_top = 2.0
+margin_right = -2.0
+margin_bottom = -2.0
+texture = ExtResource( 9 )
+expand = true
+__meta__ = {
+"_edit_use_anchors_": true
+}
+
+[node name="Label" type="Label" parent="T/D/EASY"]
+anchor_right = 1.0
+anchor_bottom = 1.0
+rect_pivot_offset = Vector2( 42, 42 )
+custom_fonts/font = SubResource( 61 )
+text = "E"
+align = 1
+valign = 1
+autowrap = true
+clip_text = true
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Select" type="Button" parent="T/D/EASY"]
+material = SubResource( 62 )
+anchor_right = 1.0
+anchor_bottom = 1.0
+custom_styles/hover = SubResource( 63 )
+custom_styles/pressed = SubResource( 63 )
+custom_styles/focus = SubResource( 64 )
+custom_styles/disabled = SubResource( 65 )
+custom_styles/normal = SubResource( 66 )
+action_mode = 0
+group = SubResource( 67 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="MEDIUM" type="Panel" parent="T/D"]
+self_modulate = Color( 1, 0.72549, 0, 1 )
+margin_left = 68.0
+margin_right = 100.0
+margin_bottom = 32.0
+rect_min_size = Vector2( 32, 32 )
+custom_styles/panel = SubResource( 59 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="TextureRect" type="TextureRect" parent="T/D/MEDIUM"]
+modulate = Color( 0.501961, 0.501961, 0.501961, 1 )
+self_modulate = Color( 1, 0.72549, 0, 1 )
+show_behind_parent = true
+material = SubResource( 60 )
+anchor_right = 1.0
+anchor_bottom = 1.0
+margin_left = 2.0
+margin_top = 2.0
+margin_right = -2.0
+margin_bottom = -2.0
+texture = ExtResource( 9 )
+expand = true
+__meta__ = {
+"_edit_use_anchors_": true
+}
+
+[node name="Label" type="Label" parent="T/D/MEDIUM"]
+anchor_right = 1.0
+anchor_bottom = 1.0
+rect_pivot_offset = Vector2( 42, 42 )
+custom_fonts/font = SubResource( 61 )
+text = "M"
+align = 1
+valign = 1
+autowrap = true
+clip_text = true
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Select" type="Button" parent="T/D/MEDIUM"]
+material = SubResource( 62 )
+anchor_right = 1.0
+anchor_bottom = 1.0
+custom_styles/hover = SubResource( 63 )
+custom_styles/pressed = SubResource( 63 )
+custom_styles/focus = SubResource( 64 )
+custom_styles/disabled = SubResource( 65 )
+custom_styles/normal = SubResource( 66 )
+action_mode = 0
+group = SubResource( 67 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="HARD" type="Panel" parent="T/D"]
+self_modulate = Color( 1, 0, 0, 1 )
+margin_left = 102.0
+margin_right = 134.0
+margin_bottom = 32.0
+rect_min_size = Vector2( 32, 32 )
+custom_styles/panel = SubResource( 59 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="TextureRect" type="TextureRect" parent="T/D/HARD"]
+modulate = Color( 0.501961, 0.501961, 0.501961, 1 )
+self_modulate = Color( 1, 0, 0, 1 )
+show_behind_parent = true
+material = SubResource( 60 )
+anchor_right = 1.0
+anchor_bottom = 1.0
+margin_left = 2.0
+margin_top = 2.0
+margin_right = -2.0
+margin_bottom = -2.0
+texture = ExtResource( 9 )
+expand = true
+__meta__ = {
+"_edit_use_anchors_": true
+}
+
+[node name="Label" type="Label" parent="T/D/HARD"]
+anchor_right = 1.0
+anchor_bottom = 1.0
+rect_pivot_offset = Vector2( 42, 42 )
+custom_fonts/font = SubResource( 61 )
+text = "H"
+align = 1
+valign = 1
+autowrap = true
+clip_text = true
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Select" type="Button" parent="T/D/HARD"]
+material = SubResource( 62 )
+anchor_right = 1.0
+anchor_bottom = 1.0
+custom_styles/hover = SubResource( 63 )
+custom_styles/pressed = SubResource( 63 )
+custom_styles/focus = SubResource( 64 )
+custom_styles/disabled = SubResource( 65 )
+custom_styles/normal = SubResource( 66 )
+action_mode = 0
+group = SubResource( 67 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="LOGIC" type="Panel" parent="T/D"]
+self_modulate = Color( 0.843137, 0.415686, 1, 1 )
+margin_left = 136.0
+margin_right = 168.0
+margin_bottom = 32.0
+rect_min_size = Vector2( 32, 32 )
+custom_styles/panel = SubResource( 59 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="TextureRect" type="TextureRect" parent="T/D/LOGIC"]
+modulate = Color( 0.501961, 0.501961, 0.501961, 1 )
+self_modulate = Color( 0.843137, 0.415686, 1, 1 )
+show_behind_parent = true
+material = SubResource( 60 )
+anchor_right = 1.0
+anchor_bottom = 1.0
+margin_left = 2.0
+margin_top = 2.0
+margin_right = -2.0
+margin_bottom = -2.0
+texture = ExtResource( 9 )
+expand = true
+__meta__ = {
+"_edit_use_anchors_": true
+}
+
+[node name="Label" type="Label" parent="T/D/LOGIC"]
+anchor_right = 1.0
+anchor_bottom = 1.0
+rect_pivot_offset = Vector2( 42, 42 )
+custom_fonts/font = SubResource( 61 )
+text = "L"
+align = 1
+valign = 1
+autowrap = true
+clip_text = true
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Select" type="Button" parent="T/D/LOGIC"]
+material = SubResource( 62 )
+anchor_right = 1.0
+anchor_bottom = 1.0
+custom_styles/hover = SubResource( 63 )
+custom_styles/pressed = SubResource( 63 )
+custom_styles/focus = SubResource( 64 )
+custom_styles/disabled = SubResource( 65 )
+custom_styles/normal = SubResource( 66 )
+action_mode = 0
+group = SubResource( 67 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="AMOGUS" type="Panel" parent="T/D"]
+self_modulate = Color( 0.211765, 0.188235, 0.309804, 1 )
+margin_left = 170.0
+margin_right = 202.0
+margin_bottom = 32.0
+rect_min_size = Vector2( 32, 32 )
+custom_styles/panel = SubResource( 59 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="TextureRect" type="TextureRect" parent="T/D/AMOGUS"]
+modulate = Color( 0.501961, 0.501961, 0.501961, 1 )
+self_modulate = Color( 0.211765, 0.188235, 0.309804, 1 )
+show_behind_parent = true
+material = SubResource( 60 )
+anchor_right = 1.0
+anchor_bottom = 1.0
+margin_left = 2.0
+margin_top = 2.0
+margin_right = -2.0
+margin_bottom = -2.0
+texture = ExtResource( 9 )
+expand = true
+
+[node name="Label" type="Label" parent="T/D/AMOGUS"]
+anchor_right = 1.0
+anchor_bottom = 1.0
+margin_right = -1.0
+margin_bottom = -3.0
+custom_fonts/font = SubResource( 68 )
+text = "助"
+align = 1
+valign = 1
+autowrap = true
+clip_text = true
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Select" type="Button" parent="T/D/AMOGUS"]
+material = SubResource( 62 )
+anchor_right = 1.0
+anchor_bottom = 1.0
+custom_styles/hover = SubResource( 63 )
+custom_styles/pressed = SubResource( 63 )
+custom_styles/focus = SubResource( 64 )
+custom_styles/disabled = SubResource( 65 )
+custom_styles/normal = SubResource( 66 )
+action_mode = 0
+group = SubResource( 67 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Broken" type="CheckBox" parent="T"]
+margin_left = 316.0
+margin_right = 392.0
+margin_bottom = 32.0
+theme = ExtResource( 5 )
+custom_colors/font_color_disabled = Color( 0.670588, 0.556863, 0.556863, 1 )
+custom_colors/font_color_focus = Color( 0.670588, 0.556863, 0.556863, 1 )
+custom_colors/font_color_hover_pressed = Color( 0.670588, 0.556863, 0.556863, 1 )
+custom_colors/font_color = Color( 0.670588, 0.556863, 0.556863, 1 )
+custom_colors/font_color_hover = Color( 0.670588, 0.556863, 0.556863, 1 )
+custom_colors/font_color_pressed = Color( 0.670588, 0.556863, 0.556863, 1 )
+custom_fonts/font = SubResource( 69 )
+action_mode = 0
+text = "broken"
+flat = true
+script = ExtResource( 21 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Online" type="CheckBox" parent="T"]
+margin_left = 392.0
+margin_right = 468.0
+margin_bottom = 32.0
+theme = ExtResource( 5 )
+custom_colors/font_color_disabled = Color( 0.670588, 0.556863, 0.556863, 1 )
+custom_colors/font_color_focus = Color( 0.670588, 0.556863, 0.556863, 1 )
+custom_colors/font_color_hover_pressed = Color( 0.670588, 0.556863, 0.556863, 1 )
+custom_colors/font_color = Color( 0.670588, 0.556863, 0.556863, 1 )
+custom_colors/font_color_hover = Color( 0.670588, 0.556863, 0.556863, 1 )
+custom_colors/font_color_pressed = Color( 0.670588, 0.556863, 0.556863, 1 )
+custom_fonts/font = SubResource( 69 )
+pressed = true
+action_mode = 0
+text = "online"
+flat = true
+script = ExtResource( 19 )
+
+[node name="AutoSwitch" type="CheckBox" parent="T"]
+margin_left = 602.0
+margin_right = 735.0
+margin_bottom = 32.0
+theme = ExtResource( 5 )
+custom_colors/font_color_disabled = Color( 0.670588, 0.556863, 0.556863, 1 )
+custom_colors/font_color_focus = Color( 0.670588, 0.556863, 0.556863, 1 )
+custom_colors/font_color_hover_pressed = Color( 0.670588, 0.556863, 0.556863, 1 )
+custom_colors/font_color = Color( 0.670588, 0.556863, 0.556863, 1 )
+custom_colors/font_color_hover = Color( 0.670588, 0.556863, 0.556863, 1 )
+custom_colors/font_color_pressed = Color( 0.670588, 0.556863, 0.556863, 1 )
+custom_fonts/font = SubResource( 69 )
+action_mode = 0
+text = "auto play screen"
+flat = true
+script = ExtResource( 10 )
+
+[node name="DiffSort" type="CheckBox" parent="T"]
+margin_left = 461.0
+margin_right = 550.0
+margin_bottom = 32.0
+theme = ExtResource( 5 )
+custom_colors/font_color_disabled = Color( 0.670588, 0.556863, 0.556863, 1 )
+custom_colors/font_color_focus = Color( 0.670588, 0.556863, 0.556863, 1 )
+custom_colors/font_color_hover_pressed = Color( 0.670588, 0.556863, 0.556863, 1 )
+custom_colors/font_color = Color( 0.670588, 0.556863, 0.556863, 1 )
+custom_colors/font_color_hover = Color( 0.670588, 0.556863, 0.556863, 1 )
+custom_colors/font_color_pressed = Color( 0.670588, 0.556863, 0.556863, 1 )
+custom_fonts/font = SubResource( 69 )
+custom_icons/checked = ExtResource( 20 )
+custom_icons/unchecked = ExtResource( 12 )
+action_mode = 0
+text = "difficulty"
+flat = true
+script = ExtResource( 14 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="NameSort" type="CheckBox" parent="T"]
+margin_left = 543.0
+margin_right = 609.0
+margin_bottom = 32.0
+theme = ExtResource( 5 )
+custom_colors/font_color_disabled = Color( 0.670588, 0.556863, 0.556863, 1 )
+custom_colors/font_color_focus = Color( 0.670588, 0.556863, 0.556863, 1 )
+custom_colors/font_color_hover_pressed = Color( 0.670588, 0.556863, 0.556863, 1 )
+custom_colors/font_color = Color( 0.670588, 0.556863, 0.556863, 1 )
+custom_colors/font_color_hover = Color( 0.670588, 0.556863, 0.556863, 1 )
+custom_colors/font_color_pressed = Color( 0.670588, 0.556863, 0.556863, 1 )
+custom_fonts/font = SubResource( 69 )
+custom_icons/checked = ExtResource( 20 )
+custom_icons/unchecked = ExtResource( 12 )
+action_mode = 0
+text = "name"
+flat = true
+script = ExtResource( 13 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="S" type="Control" parent="."]
+anchor_right = 1.0
+anchor_bottom = 1.0
+margin_top = 35.0
+rect_clip_content = true
+
+[node name="Random" type="Button" parent="S"]
+margin_left = 6.0
+margin_top = 1.0
+margin_right = 204.0
+margin_bottom = 29.0
+theme = ExtResource( 5 )
+action_mode = 0
+text = "Select random from search"
+
+[node name="G" type="GridContainer" parent="S"]
+anchor_right = 1.0
+anchor_bottom = 1.0
+margin_left = 62.0
+margin_top = 40.0
+margin_right = -62.0
+margin_bottom = -34.0
+grow_horizontal = 0
+custom_constants/vseparation = 4
+custom_constants/hseparation = 4
+columns = 5
+script = ExtResource( 4 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Press" type="AudioStreamPlayer" parent="S/G"]
+stream = ExtResource( 6 )
+volume_db = -35.0
+pitch_scale = 1.25
+
+[node name="NODIF" type="Panel" parent="S/G"]
+margin_right = 128.0
+margin_bottom = 128.0
+rect_min_size = Vector2( 128, 128 )
+custom_styles/panel = SubResource( 70 )
+script = ExtResource( 11 )
+
+[node name="TextureRect" type="TextureRect" parent="S/G/NODIF"]
+modulate = Color( 0.501961, 0.501961, 0.501961, 1 )
+show_behind_parent = true
+material = SubResource( 60 )
+anchor_right = 1.0
+anchor_bottom = 1.0
+margin_left = 6.0
+margin_top = 6.0
+margin_right = -6.0
+margin_bottom = -6.0
+texture = ExtResource( 9 )
+expand = true
+__meta__ = {
+"_edit_use_anchors_": true
+}
+
+[node name="Label" type="Label" parent="S/G/NODIF"]
+anchor_right = 1.0
+anchor_bottom = 1.0
+margin_left = 6.0
+margin_top = 6.0
+margin_right = -6.0
+margin_bottom = -6.0
+rect_pivot_offset = Vector2( 42, 42 )
+custom_fonts/font = SubResource( 71 )
+text = "N/A"
+align = 1
+valign = 1
+autowrap = true
+clip_text = true
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Cover" type="TextureRect" parent="S/G/NODIF"]
+visible = false
+material = SubResource( 72 )
+anchor_right = 1.0
+anchor_bottom = 1.0
+margin_left = 6.0
+margin_top = 6.0
+margin_right = -6.0
+margin_bottom = -6.0
+expand = true
+__meta__ = {
+"_edit_use_anchors_": true
+}
+
+[node name="F" type="TextureRect" parent="S/G/NODIF"]
+visible = false
+modulate = Color( 1, 0.36, 0.36, 1 )
+margin_left = -1.0
+margin_top = -1.0
+margin_right = 31.0
+margin_bottom = 31.0
+texture = ExtResource( 8 )
+expand = true
+stretch_mode = 6
+script = ExtResource( 3 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Cloud" type="TextureRect" parent="S/G/NODIF"]
+visible = false
+modulate = Color( 1, 1, 1, 0.384314 )
+anchor_left = 1.0
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+margin_left = -41.0
+margin_top = -38.0
+margin_right = -9.0
+margin_bottom = -6.0
+texture = ExtResource( 17 )
+expand = true
+stretch_mode = 6
+
+[node name="Select" type="Button" parent="S/G/NODIF"]
+material = SubResource( 62 )
+anchor_right = 1.0
+anchor_bottom = 1.0
+custom_styles/hover = SubResource( 63 )
+custom_styles/pressed = SubResource( 73 )
+custom_styles/focus = SubResource( 64 )
+custom_styles/disabled = SubResource( 65 )
+custom_styles/normal = SubResource( 66 )
+disabled = true
+toggle_mode = true
+action_mode = 0
+group = SubResource( 67 )
+
+[node name="Name" type="Label" parent="S/G/NODIF"]
+visible = false
+anchor_right = 1.0
+anchor_bottom = 1.0
+margin_left = 10.0
+margin_top = 6.0
+margin_right = -10.0
+margin_bottom = -6.0
+custom_constants/line_spacing = 0
+custom_fonts/font = SubResource( 74 )
+text = "OR3O
+[bongo cat & friends] meow"
+align = 1
+valign = 1
+autowrap = true
+clip_text = true
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="EASY" type="Panel" parent="S/G"]
+self_modulate = Color( 0, 1, 0, 1 )
+margin_left = 132.0
+margin_right = 260.0
+margin_bottom = 128.0
+rect_min_size = Vector2( 128, 128 )
+custom_styles/panel = SubResource( 70 )
+script = ExtResource( 11 )
+
+[node name="TextureRect" type="TextureRect" parent="S/G/EASY"]
+modulate = Color( 0.501961, 0.501961, 0.501961, 1 )
+self_modulate = Color( 0, 1, 0, 1 )
+show_behind_parent = true
+material = SubResource( 60 )
+anchor_right = 1.0
+anchor_bottom = 1.0
+margin_left = 6.0
+margin_top = 6.0
+margin_right = -6.0
+margin_bottom = -6.0
+texture = ExtResource( 9 )
+expand = true
+
+[node name="Label" type="Label" parent="S/G/EASY"]
+anchor_right = 1.0
+anchor_bottom = 1.0
+margin_left = 6.0
+margin_top = 6.0
+margin_right = -6.0
+margin_bottom = -6.0
+custom_fonts/font = SubResource( 75 )
+text = "EASY"
+align = 1
+valign = 1
+autowrap = true
+clip_text = true
+
+[node name="Cover" type="TextureRect" parent="S/G/EASY"]
+visible = false
+material = SubResource( 72 )
+anchor_right = 1.0
+anchor_bottom = 1.0
+margin_left = 6.0
+margin_top = 6.0
+margin_right = -6.0
+margin_bottom = -6.0
+expand = true
+__meta__ = {
+"_edit_use_anchors_": true
+}
+
+[node name="F" type="TextureRect" parent="S/G/EASY"]
+visible = false
+modulate = Color( 0.690196, 0.141176, 1, 1 )
+margin_left = -1.0
+margin_top = -1.0
+margin_right = 31.0
+margin_bottom = 31.0
+texture = ExtResource( 8 )
+expand = true
+stretch_mode = 6
+script = ExtResource( 3 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Cloud" type="TextureRect" parent="S/G/EASY"]
+visible = false
+modulate = Color( 1, 1, 1, 0.384314 )
+anchor_left = 1.0
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+margin_left = -41.0
+margin_top = -38.0
+margin_right = -9.0
+margin_bottom = -6.0
+texture = ExtResource( 17 )
+expand = true
+stretch_mode = 6
+
+[node name="Select" type="Button" parent="S/G/EASY"]
+material = SubResource( 62 )
+anchor_right = 1.0
+anchor_bottom = 1.0
+custom_styles/hover = SubResource( 63 )
+custom_styles/pressed = SubResource( 73 )
+custom_styles/focus = SubResource( 64 )
+custom_styles/disabled = SubResource( 65 )
+custom_styles/normal = SubResource( 66 )
+disabled = true
+toggle_mode = true
+action_mode = 0
+group = SubResource( 67 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Name" type="Label" parent="S/G/EASY"]
+visible = false
+anchor_right = 1.0
+anchor_bottom = 1.0
+margin_left = 10.0
+margin_top = 6.0
+margin_right = -10.0
+margin_bottom = -6.0
+custom_constants/line_spacing = 0
+custom_fonts/font = SubResource( 74 )
+text = "OR3O
+[bongo cat & friends] meow"
+align = 1
+valign = 1
+autowrap = true
+clip_text = true
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="MEDIUM" type="Panel" parent="S/G"]
+self_modulate = Color( 1, 0.72549, 0, 1 )
+margin_left = 264.0
+margin_right = 392.0
+margin_bottom = 128.0
+rect_min_size = Vector2( 128, 128 )
+custom_styles/panel = SubResource( 70 )
+script = ExtResource( 11 )
+
+[node name="TextureRect" type="TextureRect" parent="S/G/MEDIUM"]
+modulate = Color( 0.501961, 0.501961, 0.501961, 1 )
+self_modulate = Color( 1, 0.72549, 0, 1 )
+show_behind_parent = true
+material = SubResource( 60 )
+anchor_right = 1.0
+anchor_bottom = 1.0
+margin_left = 6.0
+margin_top = 6.0
+margin_right = -6.0
+margin_bottom = -6.0
+texture = ExtResource( 9 )
+expand = true
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Label" type="Label" parent="S/G/MEDIUM"]
+anchor_right = 1.0
+anchor_bottom = 1.0
+margin_left = 6.0
+margin_top = 6.0
+margin_right = -6.0
+margin_bottom = -6.0
+custom_fonts/font = SubResource( 76 )
+text = "MEDIUM"
+align = 1
+valign = 1
+autowrap = true
+clip_text = true
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Cover" type="TextureRect" parent="S/G/MEDIUM"]
+visible = false
+material = SubResource( 72 )
+anchor_right = 1.0
+anchor_bottom = 1.0
+margin_left = 6.0
+margin_top = 6.0
+margin_right = -6.0
+margin_bottom = -6.0
+expand = true
+__meta__ = {
+"_edit_use_anchors_": true
+}
+
+[node name="F" type="TextureRect" parent="S/G/MEDIUM"]
+visible = false
+modulate = Color( 0.2548, 0.57148, 0.91, 1 )
+margin_left = -1.0
+margin_top = -1.0
+margin_right = 31.0
+margin_bottom = 31.0
+texture = ExtResource( 8 )
+expand = true
+stretch_mode = 6
+script = ExtResource( 3 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Cloud" type="TextureRect" parent="S/G/MEDIUM"]
+visible = false
+modulate = Color( 1, 1, 1, 0.384314 )
+anchor_left = 1.0
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+margin_left = -41.0
+margin_top = -38.0
+margin_right = -9.0
+margin_bottom = -6.0
+texture = ExtResource( 17 )
+expand = true
+stretch_mode = 6
+
+[node name="Select" type="Button" parent="S/G/MEDIUM"]
+material = SubResource( 62 )
+anchor_right = 1.0
+anchor_bottom = 1.0
+custom_styles/hover = SubResource( 63 )
+custom_styles/pressed = SubResource( 73 )
+custom_styles/focus = SubResource( 64 )
+custom_styles/disabled = SubResource( 65 )
+custom_styles/normal = SubResource( 66 )
+disabled = true
+toggle_mode = true
+action_mode = 0
+group = SubResource( 67 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Name" type="Label" parent="S/G/MEDIUM"]
+visible = false
+anchor_right = 1.0
+anchor_bottom = 1.0
+margin_left = 10.0
+margin_top = 6.0
+margin_right = -10.0
+margin_bottom = -6.0
+custom_constants/line_spacing = 0
+custom_fonts/font = SubResource( 74 )
+text = "OR3O
+[bongo cat & friends] meow"
+align = 1
+valign = 1
+autowrap = true
+clip_text = true
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="HARD" type="Panel" parent="S/G"]
+self_modulate = Color( 1, 0, 0, 1 )
+margin_left = 396.0
+margin_right = 524.0
+margin_bottom = 128.0
+rect_min_size = Vector2( 128, 128 )
+custom_styles/panel = SubResource( 70 )
+script = ExtResource( 11 )
+
+[node name="TextureRect" type="TextureRect" parent="S/G/HARD"]
+modulate = Color( 0.501961, 0.501961, 0.501961, 1 )
+self_modulate = Color( 1, 0, 0, 1 )
+show_behind_parent = true
+material = SubResource( 60 )
+anchor_right = 1.0
+anchor_bottom = 1.0
+margin_left = 6.0
+margin_top = 6.0
+margin_right = -6.0
+margin_bottom = -6.0
+texture = ExtResource( 9 )
+expand = true
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Label" type="Label" parent="S/G/HARD"]
+anchor_right = 1.0
+anchor_bottom = 1.0
+margin_left = 6.0
+margin_top = 6.0
+margin_right = -6.0
+margin_bottom = -6.0
+custom_fonts/font = SubResource( 77 )
+text = "HARD"
+align = 1
+valign = 1
+autowrap = true
+clip_text = true
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Cover" type="TextureRect" parent="S/G/HARD"]
+visible = false
+material = SubResource( 72 )
+anchor_right = 1.0
+anchor_bottom = 1.0
+margin_left = 6.0
+margin_top = 6.0
+margin_right = -6.0
+margin_bottom = -6.0
+expand = true
+__meta__ = {
+"_edit_use_anchors_": true
+}
+
+[node name="F" type="TextureRect" parent="S/G/HARD"]
+visible = false
+modulate = Color( 0.321569, 0.662745, 0.25098, 1 )
+margin_left = -1.0
+margin_top = -1.0
+margin_right = 31.0
+margin_bottom = 31.0
+texture = ExtResource( 8 )
+expand = true
+stretch_mode = 6
+script = ExtResource( 3 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Cloud" type="TextureRect" parent="S/G/HARD"]
+visible = false
+modulate = Color( 1, 1, 1, 0.384314 )
+anchor_left = 1.0
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+margin_left = -41.0
+margin_top = -38.0
+margin_right = -9.0
+margin_bottom = -6.0
+texture = ExtResource( 17 )
+expand = true
+stretch_mode = 6
+
+[node name="Select" type="Button" parent="S/G/HARD"]
+material = SubResource( 62 )
+anchor_right = 1.0
+anchor_bottom = 1.0
+custom_styles/hover = SubResource( 63 )
+custom_styles/pressed = SubResource( 73 )
+custom_styles/focus = SubResource( 64 )
+custom_styles/disabled = SubResource( 65 )
+custom_styles/normal = SubResource( 66 )
+disabled = true
+toggle_mode = true
+action_mode = 0
+group = SubResource( 67 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Name" type="Label" parent="S/G/HARD"]
+visible = false
+anchor_right = 1.0
+anchor_bottom = 1.0
+margin_left = 10.0
+margin_top = 6.0
+margin_right = -10.0
+margin_bottom = -6.0
+custom_constants/line_spacing = 0
+custom_fonts/font = SubResource( 74 )
+text = "OR3O
+[bongo cat & friends] meow"
+align = 1
+valign = 1
+autowrap = true
+clip_text = true
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="LOGIC" type="Panel" parent="S/G"]
+self_modulate = Color( 0.843137, 0.415686, 1, 1 )
+margin_left = 528.0
+margin_right = 656.0
+margin_bottom = 128.0
+rect_min_size = Vector2( 128, 128 )
+custom_styles/panel = SubResource( 70 )
+script = ExtResource( 11 )
+
+[node name="TextureRect" type="TextureRect" parent="S/G/LOGIC"]
+modulate = Color( 0.501961, 0.501961, 0.501961, 1 )
+self_modulate = Color( 0.843137, 0.415686, 1, 1 )
+show_behind_parent = true
+material = SubResource( 60 )
+anchor_right = 1.0
+anchor_bottom = 1.0
+margin_left = 6.0
+margin_top = 6.0
+margin_right = -6.0
+margin_bottom = -6.0
+texture = ExtResource( 9 )
+expand = true
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Label" type="Label" parent="S/G/LOGIC"]
+anchor_right = 1.0
+anchor_bottom = 1.0
+margin_left = 6.0
+margin_top = 6.0
+margin_right = -6.0
+margin_bottom = -6.0
+custom_fonts/font = SubResource( 78 )
+text = "LOGIC?"
+align = 1
+valign = 1
+autowrap = true
+clip_text = true
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Cover" type="TextureRect" parent="S/G/LOGIC"]
+visible = false
+material = SubResource( 72 )
+anchor_right = 1.0
+anchor_bottom = 1.0
+margin_left = 6.0
+margin_top = 6.0
+margin_right = -6.0
+margin_bottom = -6.0
+expand = true
+__meta__ = {
+"_edit_use_anchors_": true
+}
+
+[node name="F" type="TextureRect" parent="S/G/LOGIC"]
+visible = false
+margin_left = -1.0
+margin_top = -1.0
+margin_right = 31.0
+margin_bottom = 31.0
+texture = ExtResource( 8 )
+expand = true
+stretch_mode = 6
+script = ExtResource( 3 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Cloud" type="TextureRect" parent="S/G/LOGIC"]
+visible = false
+modulate = Color( 1, 1, 1, 0.384314 )
+anchor_left = 1.0
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+margin_left = -41.0
+margin_top = -38.0
+margin_right = -9.0
+margin_bottom = -6.0
+texture = ExtResource( 17 )
+expand = true
+stretch_mode = 6
+
+[node name="Select" type="Button" parent="S/G/LOGIC"]
+material = SubResource( 62 )
+anchor_right = 1.0
+anchor_bottom = 1.0
+custom_styles/hover = SubResource( 63 )
+custom_styles/pressed = SubResource( 73 )
+custom_styles/focus = SubResource( 64 )
+custom_styles/disabled = SubResource( 65 )
+custom_styles/normal = SubResource( 66 )
+disabled = true
+toggle_mode = true
+action_mode = 0
+group = SubResource( 67 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Name" type="Label" parent="S/G/LOGIC"]
+visible = false
+anchor_right = 1.0
+anchor_bottom = 1.0
+margin_left = 10.0
+margin_top = 6.0
+margin_right = -10.0
+margin_bottom = -6.0
+custom_constants/line_spacing = 0
+custom_fonts/font = SubResource( 74 )
+text = "OR3O
+[bongo cat & friends] meow"
+align = 1
+valign = 1
+autowrap = true
+clip_text = true
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="AMOGUS" type="Panel" parent="S/G"]
+self_modulate = Color( 0.211765, 0.188235, 0.309804, 1 )
+margin_top = 132.0
+margin_right = 128.0
+margin_bottom = 260.0
+rect_min_size = Vector2( 128, 128 )
+custom_styles/panel = SubResource( 70 )
+script = ExtResource( 11 )
+
+[node name="TextureRect" type="TextureRect" parent="S/G/AMOGUS"]
+modulate = Color( 0.501961, 0.501961, 0.501961, 1 )
+self_modulate = Color( 0.211765, 0.188235, 0.309804, 1 )
+show_behind_parent = true
+material = SubResource( 60 )
+anchor_right = 1.0
+anchor_bottom = 1.0
+margin_left = 6.0
+margin_top = 6.0
+margin_right = -6.0
+margin_bottom = -6.0
+texture = ExtResource( 9 )
+expand = true
+
+[node name="Label" type="Label" parent="S/G/AMOGUS"]
+anchor_right = 1.0
+anchor_bottom = 1.0
+margin_left = 6.0
+margin_top = 6.0
+margin_right = -6.0
+margin_bottom = -6.0
+custom_fonts/font = SubResource( 79 )
+text = "助"
+align = 1
+valign = 1
+autowrap = true
+clip_text = true
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Cover" type="TextureRect" parent="S/G/AMOGUS"]
+visible = false
+material = SubResource( 72 )
+anchor_right = 1.0
+anchor_bottom = 1.0
+margin_left = 6.0
+margin_top = 6.0
+margin_right = -6.0
+margin_bottom = -6.0
+expand = true
+__meta__ = {
+"_edit_use_anchors_": true
+}
+
+[node name="F" type="TextureRect" parent="S/G/AMOGUS"]
+visible = false
+modulate = Color( 0.419608, 0.498039, 1, 1 )
+margin_left = -1.0
+margin_top = -1.0
+margin_right = 31.0
+margin_bottom = 31.0
+texture = ExtResource( 8 )
+expand = true
+stretch_mode = 6
+script = ExtResource( 3 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Cloud" type="TextureRect" parent="S/G/AMOGUS"]
+visible = false
+modulate = Color( 1, 1, 1, 0.384314 )
+anchor_left = 1.0
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+margin_left = -41.0
+margin_top = -38.0
+margin_right = -9.0
+margin_bottom = -6.0
+texture = ExtResource( 17 )
+expand = true
+stretch_mode = 6
+
+[node name="Select" type="Button" parent="S/G/AMOGUS"]
+material = SubResource( 62 )
+anchor_right = 1.0
+anchor_bottom = 1.0
+custom_styles/hover = SubResource( 63 )
+custom_styles/pressed = SubResource( 73 )
+custom_styles/focus = SubResource( 64 )
+custom_styles/disabled = SubResource( 65 )
+custom_styles/normal = SubResource( 66 )
+disabled = true
+toggle_mode = true
+action_mode = 0
+group = SubResource( 67 )
+
+[node name="Name" type="Label" parent="S/G/AMOGUS"]
+visible = false
+anchor_right = 1.0
+anchor_bottom = 1.0
+margin_left = 10.0
+margin_top = 6.0
+margin_right = -10.0
+margin_bottom = -6.0
+custom_constants/line_spacing = 0
+custom_fonts/font = SubResource( 74 )
+text = "OR3O
+[bongo cat & friends] meow"
+align = 1
+valign = 1
+autowrap = true
+clip_text = true
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="P" type="Button" parent="S"]
+anchor_bottom = 1.0
+margin_left = 724.0
+margin_top = 34.0
+margin_right = 774.0
+margin_bottom = -28.0
+theme = ExtResource( 5 )
+custom_styles/hover = SubResource( 80 )
+custom_styles/pressed = SubResource( 81 )
+custom_styles/focus = SubResource( 82 )
+custom_styles/disabled = SubResource( 83 )
+custom_styles/normal = SubResource( 84 )
+shortcut_in_tooltip = false
+action_mode = 0
+shortcut = SubResource( 85 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="M" type="Button" parent="S"]
+anchor_bottom = 1.0
+margin_left = 6.0
+margin_top = 34.0
+margin_right = 56.0
+margin_bottom = -28.0
+theme = ExtResource( 5 )
+custom_styles/hover = SubResource( 80 )
+custom_styles/pressed = SubResource( 81 )
+custom_styles/focus = SubResource( 82 )
+custom_styles/disabled = SubResource( 83 )
+custom_styles/normal = SubResource( 84 )
+shortcut_in_tooltip = false
+action_mode = 0
+
+[node name="Label" type="Label" parent="."]
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+margin_bottom = 35.0
+custom_fonts/font = SubResource( 87 )
+text = "mobile compatible menu!!!"
+align = 1
+valign = 1
+autowrap = true

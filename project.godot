@@ -259,7 +259,7 @@ boot_splash/bg_color=Color( 0, 0, 0, 1 )
 config/icon="res://icon.svg"
 config/windows_native_icon="res://icon.ico"
 config/quit_on_go_back=false
-config/version="0.12.7-stable"
+config/version="0.12.7-nightly"
 config/autoload_map_registries="test maps|res://test_assets/test_maps.sspmr;built in|res://content/songs/built_in_maps.sspmr"
 config/enable_new_content_mgr=true
 config/default_menu_target="res://menu2.tscn"
@@ -334,6 +334,10 @@ enabled=PoolStringArray( "res://addons/discord_game_sdk/plugin.cfg", "res://addo
 [gdnative]
 
 singletons=[ "res://addons/godot-openvr/godot_openvr.gdnlib" ]
+
+[global]
+
+clear=false
 
 [gui]
 
@@ -459,6 +463,6 @@ quality/reflections/texture_array_reflections=false
 quality/filters/anisotropic_filter_level=2
 2d/options/use_software_skinning=false
 quality/lightmapping/use_bicubic_sampling=false
-environment/default_clear_color=Color( 0.137255, 0.137255, 0.137255, 1 )
+environment/default_clear_color=Color( 0.164706, 0.0509804, 0.137255, 1 )
 quality/filters/msaa=1
 environment/default_environment="res://default_env.tres"
